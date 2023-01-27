@@ -12,13 +12,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gulogulo208/beauty-buddy.git"
+    "url": "git+https://github.com/gulogulo208/sojourner.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/gulogulo208/beauty-buddy/issues"
+    "url": "https://github.com/gulogulo208/sojourner/issues"
   },
-  "homepage": "https://github.com/gulogulo208/beauty-buddy#readme"
+  "homepage": "https://github.com/gulogulo208/sojourner#readme"
 }

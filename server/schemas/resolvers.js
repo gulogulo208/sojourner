@@ -13,11 +13,13 @@ const resolvers = {
   Query: {
     getTrips: async (parent, args, context) => {
       if (context.user) {
-        const userTrips = await User.findById(context.user._id).populate(
-          "trips"
-        );
+        try {
+          const userTrips = await Trip.find({ users: context.user._id });
 
-        return userTrips;
+          return userTrips;
+        } catch (error) {
+          console.error(error);
+        }
       }
 
       throw new AuthenticationError("You must be logged in to view trips");
@@ -25,9 +27,13 @@ const resolvers = {
 
     getPosts: async (parent, { tripId }, context) => {
       if (context.user) {
-        const tripPosts = await Trip.findById(tripId).populate("posts");
+        try {
+          const tripPosts = await Post.find({ trip: tripId });
 
-        return tripPosts;
+          return tripPosts;
+        } catch (error) {
+          console.error(error);
+        }
       }
 
       throw new AuthenticationError("You must be logged in to view posts");
@@ -64,6 +70,8 @@ const resolvers = {
       if (context.user) {
         const trip = new Trip({ tripName });
 
+        await trip.save();
+
         await User.findByIdAndUpdate(context.user._id, {
           $push: { trips: trip._id },
         });
@@ -94,11 +102,14 @@ const resolvers = {
 
     createPost: async (parent, args, context) => {
       if (context.user) {
-        const post = new Post({ postType: args.postType, trip: args.tripId });
+        const post = await Post.create({
+          postType: args.postType,
+          trip: args.tripId,
+        });
 
         switch (post.postType) {
           case "Transportation":
-            const transportation = new Transportation({
+            const transportation = await Transportation.create({
               transportationType: args.transportationType,
               fromDate: args.fromDate,
               toDate: args.toDate,
@@ -106,18 +117,21 @@ const resolvers = {
               post: post._id,
             });
 
+            post.postData = transportation._id;
+            await post.save();
+
             await User.findByIdAndUpdate(context.user._id, {
-              $push: { posts: post },
+              $push: { posts: post._id },
             });
 
             await Trip.findByIdAndUpdate(args.tripId, {
-              $push: { posts: post },
+              $push: { posts: post._id },
             });
 
-            return { post };
+            return post;
 
           case "Lodging":
-            const lodging = new Lodging({
+            const lodging = await Lodging.create({
               lodgingType: args.lodgingType,
               fromDate: args.fromDate,
               toDate: args.toDate,
@@ -125,33 +139,39 @@ const resolvers = {
               post: post._id,
             });
 
+            post.postData = lodging._id;
+            await post.save();
+
             await User.findByIdAndUpdate(context.user._id, {
-              $push: { posts: post },
+              $push: { posts: post._id },
             });
 
             await Trip.findByIdAndUpdate(args.tripId, {
-              $push: { posts: post },
+              $push: { posts: post._id },
             });
 
-            return { post };
+            return post;
 
           case "Itinerary":
-            const itinerary = new Itinerary({
+            const itinerary = await Itinerary.create({
               activity: args.activity,
               description: args.description,
               price: args.price,
               post: post._id,
             });
 
+            post.postData = itinerary._id;
+            await post.save();
+
             await User.findByIdAndUpdate(context.user._id, {
-              $push: { posts: post },
+              $push: { posts: post._id },
             });
 
             await Trip.findByIdAndUpdate(args.tripId, {
-              $push: { posts: post },
+              $push: { posts: post._id },
             });
 
-            return { post };
+            return post;
 
           default:
             console.error("postType is required");

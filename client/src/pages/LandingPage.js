@@ -8,7 +8,6 @@ const Landing = () => {
     console.log("I AM IN THE LANDING PAGE!")
     return (
         <div>
-            <h1>WELCOME!</h1>
         </div>
     )
 

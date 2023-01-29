@@ -14,18 +14,14 @@ function App() {
   return (
     <>
     < ApolloProvider client={client}>
-
-        <h1>HELLO</h1>
         <Navbar />
       <Router>
-      <>
         <Routes>
           <Route 
             path='/' 
             element={<LandingPage/>} 
           />
         </Routes>
-      </>
     </Router>
     </ApolloProvider>
     </>

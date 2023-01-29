@@ -20,7 +20,7 @@ const typeDefs = gql`
   }
 
   type Post {
-    _id: ID!
+    _id: ID
     dateCreated: String!
     postType: String!
     trip: Trip
@@ -32,7 +32,7 @@ const typeDefs = gql`
     transportationType: String!
     fromDate: String
     toDate: String
-    price: String!
+    price: Float!
     post: Post
   }
 
@@ -42,7 +42,7 @@ const typeDefs = gql`
     lodgingType: String!
     fromDate: String
     toDate: String
-    price: String!
+    price: Float!
     post: Post
   }
 
@@ -51,7 +51,7 @@ const typeDefs = gql`
     dateCreated: String!
     activity: String!
     description: String!
-    price: String
+    price: Float
     post: Post
   }
 
@@ -77,11 +77,11 @@ const typeDefs = gql`
     addUserToTrip(tripId: String!, userId: String!): Trip
     createPost(
       postType: String!
-      trip: ID!
+      tripId: ID!
       transportationType: String
       fromDate: String
       toDate: String
-      price: String
+      price: Float
       lodgingType: String
       activity: String
       description: String

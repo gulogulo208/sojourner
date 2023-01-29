@@ -16,6 +16,30 @@ const postSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Trip",
   },
+  postData: {
+    type: Schema.Types.ObjectId,
+  },
+});
+
+postSchema.virtual("transportation", {
+  ref: "Transportation",
+  localField: "postData",
+  foreignField: "_id",
+  justOne: true,
+});
+
+postSchema.virtual("lodging", {
+  ref: "Lodging",
+  localField: "postData",
+  foreignField: "_id",
+  justOne: true,
+});
+
+postSchema.virtual("itinerary", {
+  ref: "Itinerary",
+  localField: "postData",
+  foreignField: "_id",
+  justOne: true,
 });
 
 const Post = mongoose.model("Post", postSchema);

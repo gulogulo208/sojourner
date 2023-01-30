@@ -2,24 +2,29 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
-const postSchema = new Schema({
-  dateCreated: {
-    type: Date,
-    default: Date.now,
+const postSchema = new Schema(
+  {
+    dateCreated: {
+      type: Date,
+      default: Date.now,
+    },
+    postType: {
+      type: String,
+      enum: ["Transportation", "Lodging", "Itinerary"],
+      required: true,
+    },
+    trip: {
+      type: Schema.Types.ObjectId,
+      ref: "Trip",
+    },
+    postData: {
+      type: Schema.Types.ObjectId,
+    },
   },
-  postType: {
-    type: String,
-    enum: ["Transportation", "Lodging", "Itinerary"],
-    required: true,
-  },
-  trip: {
-    type: Schema.Types.ObjectId,
-    ref: "Trip",
-  },
-  postData: {
-    type: Schema.Types.ObjectId,
-  },
-});
+  {
+    toJSON: { virtuals: true },
+  }
+);
 
 postSchema.virtual("transportation", {
   ref: "Transportation",

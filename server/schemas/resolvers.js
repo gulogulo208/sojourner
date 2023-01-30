@@ -92,7 +92,7 @@ const resolvers = {
           $push: { trips: updatedTrip._id },
         });
 
-        return { updatedTrip };
+        return updatedTrip;
       }
 
       throw new AuthenticationError(

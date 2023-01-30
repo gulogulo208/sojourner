@@ -12,18 +12,6 @@ query Query {
       _id
       firstName
       lastName
-      email
-      password
-    }
-    posts {
-      _id
-      dateCreated
-      postType
-      trip {
-        _id
-        createdAt
-        tripName
-      }
     }
   }
 }
@@ -31,13 +19,10 @@ query Query {
 
 export const GET_POSTS = gql `
 query GetPosts($tripId: ID!) {
-    getPosts(tripId: $tripId) {
-      _id
-      dateCreated
-      postType
-      trip {
-        _id
-      }
-    }
+  getPosts(tripId: $tripId) {
+    _id
+    dateCreated
+    postType
   }
+}
 `

@@ -15,6 +15,7 @@ const typeDefs = gql`
     _id: ID!
     createdAt: String!
     tripName: String!
+    tripPhoto: String
     users: [User]
     posts: [Post]
   }

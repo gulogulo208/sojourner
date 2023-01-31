@@ -8,6 +8,7 @@ const {
   Itinerary,
 } = require("../models");
 const { signToken } = require("../utils/auth");
+const { createTripPhoto } = require("../utils/createTripPhoto");
 
 const resolvers = {
   Query: {
@@ -68,7 +69,8 @@ const resolvers = {
 
     createTrip: async (parent, { tripName }, context) => {
       if (context.user) {
-        const trip = new Trip({ tripName });
+        const tripPhoto = await createTripPhoto(tripName);
+        const trip = new Trip({ tripName, tripPhoto });
 
         await trip.save();
 

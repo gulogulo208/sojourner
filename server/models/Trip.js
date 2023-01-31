@@ -11,6 +11,9 @@ const tripSchema = new Schema({
     type: String,
     required: true,
   },
+  tripPhoto: {
+    type: String,
+  },
   users: [
     {
       type: Schema.Types.ObjectId,

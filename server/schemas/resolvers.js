@@ -82,7 +82,7 @@ const resolvers = {
       throw new AuthenticationError("You must be logged in to create a trip");
     },
 
-    addUserToTrip: async (parent, { tripId, userId }, context) => {
+    addUserToTrip: async (parent, { tripId, userId, tripName }, context) => {
       if (context.user) {
         const updatedTrip = await Trip.findByIdAndUpdate(tripId, {
           $push: { users: userId },
@@ -93,7 +93,6 @@ const resolvers = {
         });
 
         return updatedTrip;
-      }
 
       throw new AuthenticationError(
         "You must be logged in to add a user to a trip"

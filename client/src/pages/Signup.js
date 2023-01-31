@@ -122,12 +122,6 @@ function Signup(props) {
                       onChange={handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12}>
-                    <FormControlLabel
-                      control={<Checkbox value="allowExtraEmails" color="primary" />}
-                      label=""
-                    />
-                  </Grid>
                 </Grid>
                 <Button
                   type="submit"

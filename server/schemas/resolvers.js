@@ -93,7 +93,7 @@ const resolvers = {
         });
 
         return updatedTrip;
-
+      }
       throw new AuthenticationError(
         "You must be logged in to add a user to a trip"
       );

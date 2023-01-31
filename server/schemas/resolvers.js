@@ -52,13 +52,13 @@ const resolvers = {
       const user = await User.findOne({ email });
 
       if (!user) {
-        throw new AuthenticationError("Incorrect credentials");
+        throw new AuthenticationError("Incorrect email or password");
       }
 
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw new AuthenticationError("Incorrect credentials");
+        throw new AuthenticationError("Incorrect email or password");
       }
 
       const token = signToken(user);
@@ -92,8 +92,7 @@ const resolvers = {
           $push: { trips: updatedTrip._id },
         });
 
-        return  updatedTrip ;
-      }
+        return updatedTrip;
 
       throw new AuthenticationError(
         "You must be logged in to add a user to a trip"

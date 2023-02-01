@@ -25,6 +25,7 @@ import { CardActionArea } from "@mui/material";
 import LandscapeRoundedIcon from '@mui/icons-material/LandscapeRounded';
 
 const drawerWidth = 240;
+// let display;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -94,13 +95,16 @@ const Drawer = styled(MuiDrawer, {
 export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [ displayIcon, setDisplay ] = React.useState("block")
 
   const handleDrawerOpen = () => {
     setOpen(true);
+    setDisplay("none");
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
+    setDisplay("block");
   };
 
   return (
@@ -120,8 +124,7 @@ export default function MiniDrawer() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Mini variant drawer
+          <Typography variant="h6" noWrap component="div">Mini variant drawer
           </Typography>
         </Toolbar>
       </AppBar>
@@ -175,9 +178,9 @@ export default function MiniDrawer() {
                     display: "none",
                   }}
                 >
-                  {<LandscapeRoundedIcon />}
+                  <LandscapeRoundedIcon/>
                 </ListItemIcon>
-                <Card sx={{ opacity: open ? 1 : 0 }} />
+                {/* <Card sx={{ opacity: open ? 1 : 0 }} /> */}
                 <listItemIcon sx={{}} />
                 {/* <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} /> */}
               </ListItemButton>

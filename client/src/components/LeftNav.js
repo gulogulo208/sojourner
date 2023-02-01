@@ -16,8 +16,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+// import InboxIcon from "@mui/icons-material/MoveToInbox";
+// import MailIcon from "@mui/icons-material/Mail";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -25,7 +25,7 @@ import { CardActionArea } from "@mui/material";
 import LandscapeRoundedIcon from "@mui/icons-material/LandscapeRounded";
 import Tooltip from "@mui/material/Tooltip";
 import { QUERY_TRIPS } from "../utils/queries";
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import HikingRoundedIcon from "@mui/icons-material/HikingRounded";
 import { Link } from "react-router-dom";
 
@@ -96,30 +96,30 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function MiniDrawer() {
-  let tripList;
-  const GetTrips = () => {
-    const { loading, data } = useQuery(QUERY_TRIPS);
-
-    let tripList = data?.trip || [];
-  };
-
-  console.log(tripList)
+export default function MiniDrawer() { 
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  // const [ displayIcon, setDisplay ] = React.useState("block")
 
   const handleDrawerOpen = () => {
     setOpen(true);
-    // setDisplay("none");
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
-    // setDisplay("block");
+
   };
 
+  const { loading, data } = useQuery(QUERY_TRIPS);
+  
+  if(loading){
+    return "Still loading..."
+  }
+
+  const tripList = data.getTrips || []
+  console.log(tripList)
+  console.log(tripList[0].tripName)
+  
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -155,9 +155,9 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          {[tripList].map((text, index) => (
-            <Tooltip title="Trip 1" placement="right">
-              <ListItem key={text} disablePadding sx={{ display: "block" }}>
+          {tripList.map((trip, index) => (
+            <Tooltip title={trip.tripName} placement="right">
+              <ListItem key={trip._id} disablePadding sx={{ display: "block" }} id={trip._id}>
                 <ListItemButton
                   sx={{
                     minHeight: 48,
@@ -172,12 +172,12 @@ export default function MiniDrawer() {
                       <CardMedia
                         component="img"
                         height="140"
-                        image="https://source.unsplash.com/random"
-                        alt="green iguana"
+                        image={trip.tripPhoto}
+                        alt="destination img"
                       />
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
-                          Lizard
+                          {trip.tripName}
                         </Typography>
                         {/* <Typography variant="body2" color="text.secondary">
                         Lizards are a widespread group of squamate reptiles,
@@ -200,7 +200,7 @@ export default function MiniDrawer() {
           ))}
         </List>
         <Divider />
-        <List sx={{ alignContent: "end" }}>
+        <List key={{}}>
           <Link to={{ pathname: "/profile" }}>
             <ListItem disablePadding sx={{ display: "block" }}>
               <ListItemButton
@@ -230,7 +230,7 @@ export default function MiniDrawer() {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-        {/* <Typography paragraph>
+        <Typography paragraph>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
           tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
           enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
@@ -256,7 +256,7 @@ export default function MiniDrawer() {
           tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
           eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
           posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography> */}
+        </Typography>
       </Box>
     </Box>
   );

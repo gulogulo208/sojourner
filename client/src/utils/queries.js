@@ -10,10 +10,12 @@ query Query {
     tripName
     users {
       _id
-      createdAt
-      tripName
+      firstName
+      lastName
     }
+    tripPhoto
   }
+}
 `;
 
 export const GET_POSTS = gql`

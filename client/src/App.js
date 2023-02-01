@@ -1,10 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import LandingPage from './pages/LandingPage'
+import Home from './pages/Home'
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import LeftNav from './components/LeftNav'
 // import Error from './components/Error';
 
 const client = new ApolloClient({
@@ -20,11 +21,11 @@ function App() {
         <Routes>
         <Route
             path='/'
-            element={<Login />}
+            element={<><Login /></>}
           />
           <Route 
             path='/landing' 
-            element={<LandingPage/>} 
+            element={<><Home/></>} 
           />
           <Route
             path='/signup'

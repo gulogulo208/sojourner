@@ -18,6 +18,16 @@ query Query {
 }
 `;
 
+export const QUERY_TRIP = gql`
+query GetTrip($tripId: ID!) {
+  getTrip(tripId: $tripId) {
+    tripName
+    tripPhoto
+    _id
+  }
+}
+`;
+
 export const GET_POSTS = gql`
   query GetPosts($tripId: ID!) {
     getPosts(tripId: $tripId) {

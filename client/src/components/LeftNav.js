@@ -24,10 +24,11 @@ import CardMedia from "@mui/material/CardMedia";
 import { CardActionArea } from "@mui/material";
 import LandscapeRoundedIcon from "@mui/icons-material/LandscapeRounded";
 import Tooltip from "@mui/material/Tooltip";
-import { QUERY_TRIPS } from "../utils/queries";
-import { useQuery } from "@apollo/client";
+import { QUERY_TRIPS, QUERY_TRIP } from "../utils/queries";
+import { useQuery, useLazyQuery } from "@apollo/client";
 import HikingRoundedIcon from "@mui/icons-material/HikingRounded";
 import { Link } from "react-router-dom";
+// import { QueryTrips, QueryTrip } from "../utils/queryFunctions";
 
 const drawerWidth = 240;
 
@@ -96,8 +97,8 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function MiniDrawer() { 
-
+export default function MiniDrawer() {
+  // const [selectedItemId, setSelectedItemId] = React.useState(null);
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -107,19 +108,48 @@ export default function MiniDrawer() {
 
   const handleDrawerClose = () => {
     setOpen(false);
-
   };
 
-  const { loading, data } = useQuery(QUERY_TRIPS);
-  
-  if(loading){
-    return "Still loading..."
+  const [
+    fetchTrips,
+    { loading: tripsLoading, error: tripsError, data: tripsData },
+  ] = useLazyQuery(QUERY_TRIPS);
+
+  const [
+    fetchTrip,
+    { loading: tripLoading, error: tripError, data: tripData },
+  ] = useLazyQuery(QUERY_TRIP);
+
+  console.log("tripData", tripData)
+
+  const [selectedItemId, setSelectedItemId] = React.useState(null);
+
+  React.useEffect(() => {
+    fetchTrips();
+  }, [fetchTrips]);
+
+  console.log(tripsData);
+
+  if (tripsLoading) {
+    return 'Still loading...';
   }
 
-  const tripList = data.getTrips || []
-  console.log(tripList)
-  console.log(tripList[0].tripName)
-  
+  if(!tripsData){
+    return "No trips data..."
+  }
+
+  const tripList = tripsData.getTrips || [];
+  console.log(tripList);
+
+  // const { loading, data } = useLazyQuery(QUERY_TRIPS);
+
+  // if(loading){
+  //   return "Still loading..."
+  // }
+  // const tripList = data.getTrips || []
+  // console.log(tripList)
+  // console.log(tripList[0].tripName)
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -157,7 +187,14 @@ export default function MiniDrawer() {
         <List>
           {tripList.map((trip, index) => (
             <Tooltip title={trip.tripName} placement="right">
-              <ListItem key={trip._id} disablePadding sx={{ display: "block" }} id={trip._id}>
+              <ListItem
+                key={trip._id}
+                onClick={() => setSelectedItemId(trip._id)}
+                style={{ cursor: "pointer" }}
+                disablePadding
+                sx={{ display: "block" }}
+                id={trip._id}
+              >
                 <ListItemButton
                   sx={{
                     minHeight: 48,
@@ -231,29 +268,31 @@ export default function MiniDrawer() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-          enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-          imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-          Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-          Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-          nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-          leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-          feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-          consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-          sapien faucibus et molestie ac.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
+          dolor purus non enim praesent elementum facilisis leo vel. Risus at
+          ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
+          quisque non tellus. Convallis convallis tellus id interdum velit
+          laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
+          adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
+          integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
+          eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
+          quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
+          vivamus at augue. At augue eget arcu dictum varius duis at consectetur
+          lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
+          faucibus et molestie ac.
         </Typography>
         <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-          eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-          neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-          tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-          sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-          tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-          gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-          et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-          tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
+          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
+          ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
+          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
+          sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
+          mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
+          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
+          purus viverra accumsan in. In hendrerit gravida rutrum quisque non
+          tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
+          morbi tristique senectus et. Adipiscing elit duis tristique
+          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
           eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
           posuere sollicitudin aliquam ultrices sagittis orci a.
         </Typography>

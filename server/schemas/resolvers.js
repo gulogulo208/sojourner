@@ -21,6 +21,21 @@ const resolvers = {
       throw new AuthenticationError("You must be logged in to view trips");
     },
 
+    getTrip: async (parent, args, context) => {
+      if (context.user) {
+        try {
+          const specificTrip = await Trip.find({
+            _id: args.tripId
+          }).populate('_id');
+
+          return specificTrip;
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      throw new AuthenticationError('You must be logged in to view your trips')
+    },
+
     getPosts: async (parent, { tripId }, context) => {
       if (context.user) {
         try {

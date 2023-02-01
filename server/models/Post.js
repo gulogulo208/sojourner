@@ -2,49 +2,41 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
-const postSchema = new Schema(
-  {
-    dateCreated: {
-      type: Date,
-      default: Date.now,
-    },
-    postType: {
-      type: String,
-      enum: ["Transportation", "Lodging", "Itinerary"],
-      required: true,
-    },
-    trip: {
-      type: Schema.Types.ObjectId,
-      ref: "Trip",
-    },
-    postData: {
-      type: Schema.Types.ObjectId,
-    },
+const postSchema = new Schema({
+  dateCreated: {
+    type: Date,
+    default: Date.now,
   },
-  {
-    toJSON: { virtuals: true },
-  }
-);
-
-postSchema.virtual("transportation", {
-  ref: "Transportation",
-  localField: "postData",
-  foreignField: "_id",
-  justOne: true,
-});
-
-postSchema.virtual("lodging", {
-  ref: "Lodging",
-  localField: "postData",
-  foreignField: "_id",
-  justOne: true,
-});
-
-postSchema.virtual("itinerary", {
-  ref: "Itinerary",
-  localField: "postData",
-  foreignField: "_id",
-  justOne: true,
+  postType: {
+    type: String,
+    enum: ["Transportation", "Lodging", "Itinerary"],
+    required: true,
+  },
+  trip: {
+    type: Schema.Types.ObjectId,
+    ref: "Trip",
+  },
+  fromDate: {
+    type: String,
+  },
+  toDate: {
+    type: String,
+  },
+  price: {
+    type: Number,
+  },
+  transportationType: {
+    type: String,
+  },
+  lodgingType: {
+    type: String,
+  },
+  activity: {
+    type: String,
+  },
+  description: {
+    type: String,
+  },
 });
 
 const Post = mongoose.model("Post", postSchema);

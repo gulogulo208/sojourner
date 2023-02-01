@@ -21,39 +21,17 @@ const typeDefs = gql`
   }
 
   type Post {
-    _id: ID
+    _id: ID!
     dateCreated: String!
     postType: String!
-    trip: Trip
-  }
-
-  type Transportation {
-    _id: ID!
-    dateCreated: String!
-    transportationType: String!
+    trip: Trip!
     fromDate: String
     toDate: String
-    price: Float!
-    post: Post
-  }
-
-  type Lodging {
-    _id: ID!
-    dateCreated: String!
-    lodgingType: String!
-    fromDate: String
-    toDate: String
-    price: Float!
-    post: Post
-  }
-
-  type Itinerary {
-    _id: ID!
-    dateCreated: String!
-    activity: String!
-    description: String!
     price: Float
-    post: Post
+    transportationType: String
+    lodgingType: String
+    activity: String
+    description: String
   }
 
   type Auth {
@@ -79,10 +57,10 @@ const typeDefs = gql`
     createPost(
       postType: String!
       tripId: ID!
-      transportationType: String
       fromDate: String
       toDate: String
       price: Float
+      transportationType: String
       lodgingType: String
       activity: String
       description: String

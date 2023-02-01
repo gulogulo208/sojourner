@@ -1,12 +1,5 @@
 const { AuthenticationError } = require("apollo-server-express");
-const {
-  User,
-  Trip,
-  Post,
-  Transportation,
-  Lodging,
-  Itinerary,
-} = require("../models");
+const { User, Trip, Post } = require("../models");
 const { signToken } = require("../utils/auth");
 const { createTripPhoto } = require("../utils/createTripPhoto");
 
@@ -15,7 +8,9 @@ const resolvers = {
     getTrips: async (parent, args, context) => {
       if (context.user) {
         try {
-          const userTrips = await Trip.find({ users: context.user._id });
+          const userTrips = await Trip.find({
+            users: context.user._id,
+          }).populate("users");
 
           return userTrips;
         } catch (error) {
@@ -70,12 +65,18 @@ const resolvers = {
     createTrip: async (parent, { tripName }, context) => {
       if (context.user) {
         const tripPhoto = await createTripPhoto(tripName);
-        const trip = new Trip({ tripName, tripPhoto });
 
-        await trip.save();
+        const trip = await Trip.create({
+          tripName,
+          tripPhoto,
+        });
+
+        await Trip.findOneAndUpdate(trip._id, {
+          $addToSet: { users: context.user._id },
+        });
 
         await User.findByIdAndUpdate(context.user._id, {
-          $push: { trips: trip._id },
+          $addToSet: { trips: trip._id },
         });
 
         return trip;
@@ -87,11 +88,11 @@ const resolvers = {
     addUserToTrip: async (parent, { tripId, userId, tripName }, context) => {
       if (context.user) {
         const updatedTrip = await Trip.findByIdAndUpdate(tripId, {
-          $push: { users: userId },
+          $addToSet: { users: userId },
         });
 
         const updatedUser = await User.findByIdAndUpdate(userId, {
-          $push: { trips: updatedTrip._id },
+          $addToSet: { trips: updatedTrip._id },
         });
 
         return updatedTrip;
@@ -106,77 +107,24 @@ const resolvers = {
         const post = await Post.create({
           postType: args.postType,
           trip: args.tripId,
+          fromDate: args.fromDate,
+          toDate: args.toDate,
+          price: args.price,
+          transportationType: args.transportationType,
+          lodgingType: args.lodgingType,
+          activity: args.activity,
+          description: args.description,
         });
 
-        switch (post.postType) {
-          case "Transportation":
-            const transportation = await Transportation.create({
-              transportationType: args.transportationType,
-              fromDate: args.fromDate,
-              toDate: args.toDate,
-              price: args.price,
-              post: post._id,
-            });
+        await User.findOneAndUpdate(context.user._id, {
+          $addToSet: { posts: post._id },
+        });
 
-            post.postData = transportation._id;
-            await post.save();
+        await Trip.findOneAndUpdate(args.tripId, {
+          $addToSet: { posts: post._id },
+        });
 
-            await User.findByIdAndUpdate(context.user._id, {
-              $push: { posts: post._id },
-            });
-
-            await Trip.findByIdAndUpdate(args.tripId, {
-              $push: { posts: post._id },
-            });
-
-            return post;
-
-          case "Lodging":
-            const lodging = await Lodging.create({
-              lodgingType: args.lodgingType,
-              fromDate: args.fromDate,
-              toDate: args.toDate,
-              price: args.price,
-              post: post._id,
-            });
-
-            post.postData = lodging._id;
-            await post.save();
-
-            await User.findByIdAndUpdate(context.user._id, {
-              $push: { posts: post._id },
-            });
-
-            await Trip.findByIdAndUpdate(args.tripId, {
-              $push: { posts: post._id },
-            });
-
-            return post;
-
-          case "Itinerary":
-            const itinerary = await Itinerary.create({
-              activity: args.activity,
-              description: args.description,
-              price: args.price,
-              post: post._id,
-            });
-
-            post.postData = itinerary._id;
-            await post.save();
-
-            await User.findByIdAndUpdate(context.user._id, {
-              $push: { posts: post._id },
-            });
-
-            await Trip.findByIdAndUpdate(args.tripId, {
-              $push: { posts: post._id },
-            });
-
-            return post;
-
-          default:
-            console.error("postType is required");
-        }
+        return post;
       }
 
       throw new AuthenticationError("You must be logged in to create a post");

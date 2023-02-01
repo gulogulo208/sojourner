@@ -2,7 +2,7 @@ import { gql } from "@apollo/client"
 
 // export const GET_TRIPS
 
-export const GET_TRIPS = gql `
+export const QUERY_TRIPS = gql `
 query Query {
   getTrips {
     _id

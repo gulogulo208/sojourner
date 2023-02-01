@@ -22,10 +22,14 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import { CardActionArea } from "@mui/material";
-import LandscapeRoundedIcon from '@mui/icons-material/LandscapeRounded';
+import LandscapeRoundedIcon from "@mui/icons-material/LandscapeRounded";
+import Tooltip from "@mui/material/Tooltip";
+import { QUERY_TRIPS } from "../utils/queries";
+import { useMutation, useQuery } from "@apollo/client";
+import HikingRoundedIcon from "@mui/icons-material/HikingRounded";
+import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
-// let display;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -93,18 +97,27 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer() {
+  let tripList;
+  const GetTrips = () => {
+    const { loading, data } = useQuery(QUERY_TRIPS);
+
+    let tripList = data?.trip || [];
+  };
+
+  console.log(tripList)
+
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [ displayIcon, setDisplay ] = React.useState("block")
+  // const [ displayIcon, setDisplay ] = React.useState("block")
 
   const handleDrawerOpen = () => {
     setOpen(true);
-    setDisplay("none");
+    // setDisplay("none");
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
-    setDisplay("block");
+    // setDisplay("block");
   };
 
   return (
@@ -124,11 +137,12 @@ export default function MiniDrawer() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">Mini variant drawer
+          <Typography variant="h6" noWrap component="div">
+            Welcome, Sojourner
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer variant="permanent" open={open} sx={{}}>
         <DrawerHeader>
           <Typography variant="h6">Your Trips</Typography>
           <IconButton onClick={handleDrawerClose}>
@@ -141,56 +155,54 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          {["Italy", "Rome", "Big Sur", "Mammoth"].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <Card sx={{ width: "100%" }}>
-                  <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image="https://source.unsplash.com/random"
-                      alt="green iguana"
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        Lizard
-                      </Typography>
-                      {/* <Typography variant="body2" color="text.secondary">
+          {[tripList].map((text, index) => (
+            <Tooltip title="Trip 1" placement="right">
+              <ListItem key={text} disablePadding sx={{ display: "block" }}>
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                >
+                  <Card
+                    sx={{ width: "100%", display: open ? "block" : "none" }}
+                  >
+                    <CardActionArea>
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image="https://source.unsplash.com/random"
+                        alt="green iguana"
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                          Lizard
+                        </Typography>
+                        {/* <Typography variant="body2" color="text.secondary">
                         Lizards are a widespread group of squamate reptiles,
                         with over 6,000 species, ranging across all continents
                         except Antarctica
                       </Typography> */}
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                    display: "none",
-                  }}
-                >
-                  <LandscapeRoundedIcon/>
-                </ListItemIcon>
-                {/* <Card sx={{ opacity: open ? 1 : 0 }} /> */}
-                <listItemIcon sx={{}} />
-                {/* <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} /> */}
-              </ListItemButton>
-            </ListItem>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                  <LandscapeRoundedIcon
+                    sx={{
+                      minWidth: 0,
+                      justifyContent: "center",
+                      display: open ? "none" : "block",
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </Tooltip>
           ))}
         </List>
         <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block" }}>
+        <List sx={{ alignContent: "end" }}>
+          <Link to={{ pathname: "/profile" }}>
+            <ListItem disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -205,12 +217,15 @@ export default function MiniDrawer() {
                     justifyContent: "center",
                   }}
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  <HikingRoundedIcon />
                 </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText
+                  primary={"Your Profile"}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
               </ListItemButton>
             </ListItem>
-          ))}
+          </Link>
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

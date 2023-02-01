@@ -24,7 +24,7 @@ function App() {
             element={<><Login /></>}
           />
           <Route 
-            path='/landing' 
+            path='/home' 
             element={<><Home/></>} 
           />
           <Route

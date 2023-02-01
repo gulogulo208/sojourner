@@ -18,11 +18,18 @@ export const GET_TRIPS = gql`
 `;
 
 export const GET_POSTS = gql`
-  query GetPosts($tripId: ID!) {
+  query getPosts($tripId: ID!) {
     getPosts(tripId: $tripId) {
       _id
       dateCreated
       postType
+      fromDate
+      toDate
+      transportationType
+      lodgingType
+      activity
+      description
+      price
     }
   }
 `;

@@ -22,7 +22,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import { CardActionArea } from "@mui/material";
-import LandscapeRoundedIcon from '@mui/icons-material/LandscapeRounded';
+import LandscapeRoundedIcon from "@mui/icons-material/LandscapeRounded";
 
 const drawerWidth = 240;
 // let display;
@@ -95,7 +95,7 @@ const Drawer = styled(MuiDrawer, {
 export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [ displayIcon, setDisplay ] = React.useState("block")
+  const [displayIcon, setDisplay] = React.useState("block");
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -124,7 +124,8 @@ export default function MiniDrawer() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">Mini variant drawer
+          <Typography variant="h6" noWrap component="div">
+            Mini variant drawer
           </Typography>
         </Toolbar>
       </AppBar>
@@ -173,15 +174,15 @@ export default function MiniDrawer() {
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
                     display: "none",
                   }}
                 >
-                  <LandscapeRoundedIcon/>
+                  <LandscapeRoundedIcon />
                 </ListItemIcon>
                 {/* <Card sx={{ opacity: open ? 1 : 0 }} /> */}
-                <listItemIcon sx={{}} />
+                <ListItemIcon sx={{}} />
                 {/* <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} /> */}
               </ListItemButton>
             </ListItem>

@@ -29,6 +29,16 @@ import { useQuery, useLazyQuery } from "@apollo/client";
 import HikingRoundedIcon from "@mui/icons-material/HikingRounded";
 import { Link } from "react-router-dom";
 import Timeline from "./Timeline";
+import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
+import Modal from "@mui/material/Modal";
+import tripModal from "./addTripModal";
+import Backdrop from "@mui/material/Backdrop";
+import Fade from "@mui/material/Fade";
+import InputLabel from "@mui/material/InputLabel";
+import TextField from "@mui/material/TextField";
+import LuggageIcon from "@mui/icons-material/Luggage";
+import Button from "@mui/material/Button";
+import { textAlign } from "@mui/system";
 
 const drawerWidth = 240;
 
@@ -102,6 +112,27 @@ export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
+  const [openTripModal, setOpenTripModal] = React.useState(false);
+  const handleOpenTripModal = () => setOpenTripModal(true);
+  const handleCloseTripModal = () => setOpenTripModal(false);
+
+  const handleAddTrip = () => {
+    
+  }
+
+  const tripModalStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+    borderRadius: "16px"
+  };
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -131,11 +162,11 @@ export default function MiniDrawer() {
   console.log(tripsData);
 
   if (tripsLoading) {
-    return 'Still loading...';
+    return "Still loading...";
   }
 
-  if(!tripsData){
-    return "No trips data..."
+  if (!tripsData) {
+    return "No trips data...";
   }
 
   const tripList = tripsData.getTrips || [];
@@ -150,8 +181,39 @@ export default function MiniDrawer() {
   // console.log(tripList)
   // console.log(tripList[0].tripName)
 
+  console.log(openTripModal);
+
   return (
     <Box sx={{ display: "flex" }}>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        onClose={handleCloseTripModal}
+        open={openTripModal}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openTripModal}>
+          <Box sx={tripModalStyle}>
+              <Typography sx={{textAlign: "center", marginBottom: "1rem"}}>
+                Your Next Destination
+              </Typography>
+            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "flex-end"}}>
+              <TextField
+                id="input-with-sx"
+                label="Milan, Italy"
+                variant="standard"
+              />
+            </Box>
+            <Box sx={{display: "flex", justifyContent: "center", marginTop: "1.5rem"}}>
+            <Button sx={{textAlign: "center"}} onClick={handleAddTrip}>Add Trip </Button>
+            </Box>
+          </Box>
+        </Fade>
+      </Modal>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
@@ -238,6 +300,30 @@ export default function MiniDrawer() {
         </List>
         <Divider />
         <List key={{}}>
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItemButton
+              onClick={handleOpenTripModal}
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <AddLocationAltIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={"Add A Trip"}
+                sx={{ opacity: open ? 1 : 0 }}
+              />
+            </ListItemButton>
+          </ListItem>
           <Link to={{ pathname: "/profile" }}>
             <ListItem disablePadding sx={{ display: "block" }}>
               <ListItemButton

@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery, useLazyQuery } from "@apollo/client";
 import { GET_POSTS } from "../utils/queries";
 import CircularProgress from "@mui/material/CircularProgress";
 import Card from "@mui/material/Card";
@@ -13,10 +13,6 @@ const Timeline = ({ tripId }) => {
     variables: { tripId: tripId },
   });
 
-  if(!tripId){
-    return "No tripId data present"
-  }
-
   if (loading) {
     return (
       <>
@@ -26,6 +22,7 @@ const Timeline = ({ tripId }) => {
   }
 
   const posts = data.getPosts;
+  console.log(posts);
 
   return (
     <>

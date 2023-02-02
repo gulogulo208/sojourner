@@ -21,11 +21,11 @@ import ListItemText from "@mui/material/ListItemText";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import { CardActionArea } from "@mui/material";
+import { CardActionArea, CircularProgress } from "@mui/material";
 import LandscapeRoundedIcon from "@mui/icons-material/LandscapeRounded";
 import Tooltip from "@mui/material/Tooltip";
 import { QUERY_TRIPS } from "../utils/queries";
-import { useQuery, useLazyQuery } from "@apollo/client";
+import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import HikingRoundedIcon from "@mui/icons-material/HikingRounded";
 import { Link } from "react-router-dom";
 import Timeline from "./Timeline";
@@ -39,6 +39,7 @@ import TextField from "@mui/material/TextField";
 import LuggageIcon from "@mui/icons-material/Luggage";
 import Button from "@mui/material/Button";
 import { textAlign } from "@mui/system";
+import { CREATE_TRIP } from "../utils/mutation";
 
 const drawerWidth = 240;
 
@@ -113,12 +114,19 @@ export default function MiniDrawer() {
   const [open, setOpen] = React.useState(false);
 
   const [openTripModal, setOpenTripModal] = React.useState(false);
+  const [tripName, setTripName] = React.useState("");
   const handleOpenTripModal = () => setOpenTripModal(true);
   const handleCloseTripModal = () => setOpenTripModal(false);
 
-  const handleAddTrip = () => {
-    
-  }
+  const [createTrip, { loading, data, error }] = useMutation(CREATE_TRIP);
+
+  const handleAddTrip = async () => {
+    createTrip({
+      variables: {
+        tripName: tripName,
+      },
+    });
+  };
 
   const tripModalStyle = {
     position: "absolute",
@@ -130,7 +138,7 @@ export default function MiniDrawer() {
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
-    borderRadius: "16px"
+    borderRadius: "16px",
   };
 
   const handleDrawerOpen = () => {
@@ -146,20 +154,19 @@ export default function MiniDrawer() {
     { loading: tripsLoading, error: tripsError, data: tripsData },
   ] = useLazyQuery(QUERY_TRIPS);
 
-  // const [
-  //   fetchTrip,
-  //   { loading: tripLoading, error: tripError, data: tripData },
-  // ] = useLazyQuery(QUERY_TRIP);
+  const [tripId, setTripId] = React.useState("");
+  const [showTimeline, setShowTimeline] = React.useState(false);
 
-  // console.log("tripData", tripData)
-
-  const [selectedItemId, setSelectedItemId] = React.useState(null);
+  const handleTripId = (tripId) => {
+    setTripId(tripId);
+    setShowTimeline(true);
+  };
 
   React.useEffect(() => {
     fetchTrips();
   }, [fetchTrips]);
 
-  console.log(tripsData);
+  // console.log(tripsData);
 
   if (tripsLoading) {
     return "Still loading...";
@@ -170,18 +177,7 @@ export default function MiniDrawer() {
   }
 
   const tripList = tripsData.getTrips || [];
-  console.log(tripList);
-
-  // const { loading, data } = useLazyQuery(QUERY_TRIPS);
-
-  // if(loading){
-  //   return "Still loading..."
-  // }
-  // const tripList = data.getTrips || []
-  // console.log(tripList)
-  // console.log(tripList[0].tripName)
-
-  console.log(openTripModal);
+  // console.log(tripList);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -198,18 +194,34 @@ export default function MiniDrawer() {
       >
         <Fade in={openTripModal}>
           <Box sx={tripModalStyle}>
-              <Typography sx={{textAlign: "center", marginBottom: "1rem"}}>
-                Your Next Destination
-              </Typography>
-            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "flex-end"}}>
+            <Typography sx={{ textAlign: "center", marginBottom: "1rem" }}>
+              Your Next Destination
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end",
+              }}
+            >
               <TextField
                 id="input-with-sx"
                 label="Milan, Italy"
                 variant="standard"
+                value={tripName}
+                onChange={(e) => setTripName(e.target.value)}
               />
             </Box>
-            <Box sx={{display: "flex", justifyContent: "center", marginTop: "1.5rem"}}>
-            <Button sx={{textAlign: "center"}} onClick={handleAddTrip}>Add Trip </Button>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "1.5rem",
+              }}
+            >
+              <Button sx={{ textAlign: "center" }} onClick={handleAddTrip}>
+                Add Trip{" "}
+              </Button>
             </Box>
           </Box>
         </Fade>
@@ -248,10 +260,9 @@ export default function MiniDrawer() {
         <Divider />
         <List>
           {tripList.map((trip, index) => (
-            <Tooltip title={trip.tripName} placement="right">
+            <Tooltip key={trip._id} title={trip.tripName} placement="right">
               <ListItem
-                key={trip._id}
-                onClick={() => setSelectedItemId(trip._id)}
+                onClick={() => handleTripId(trip._id)}
                 style={{ cursor: "pointer" }}
                 disablePadding
                 sx={{ display: "block" }}
@@ -299,7 +310,7 @@ export default function MiniDrawer() {
           ))}
         </List>
         <Divider />
-        <List key={{}}>
+        <List>
           <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton
               onClick={handleOpenTripModal}
@@ -382,7 +393,7 @@ export default function MiniDrawer() {
           eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
           posuere sollicitudin aliquam ultrices sagittis orci a.
         </Typography> */}
-        <Timeline />
+        {showTimeline ? <Timeline tripId={tripId} /> : ""}
       </Box>
     </Box>
   );

@@ -24,11 +24,10 @@ import CardMedia from "@mui/material/CardMedia";
 import { CardActionArea } from "@mui/material";
 import LandscapeRoundedIcon from "@mui/icons-material/LandscapeRounded";
 import Tooltip from "@mui/material/Tooltip";
-import { QUERY_TRIPS, QUERY_TRIP } from "../utils/queries";
+import { QUERY_TRIPS } from "../utils/queries";
 import { useQuery, useLazyQuery } from "@apollo/client";
 import HikingRoundedIcon from "@mui/icons-material/HikingRounded";
 import { Link } from "react-router-dom";
-// import { QueryTrips, QueryTrip } from "../utils/queryFunctions";
 
 const drawerWidth = 240;
 
@@ -115,12 +114,12 @@ export default function MiniDrawer() {
     { loading: tripsLoading, error: tripsError, data: tripsData },
   ] = useLazyQuery(QUERY_TRIPS);
 
-  const [
-    fetchTrip,
-    { loading: tripLoading, error: tripError, data: tripData },
-  ] = useLazyQuery(QUERY_TRIP);
+  // const [
+  //   fetchTrip,
+  //   { loading: tripLoading, error: tripError, data: tripData },
+  // ] = useLazyQuery(QUERY_TRIP);
 
-  console.log("tripData", tripData)
+  // console.log("tripData", tripData)
 
   const [selectedItemId, setSelectedItemId] = React.useState(null);
 

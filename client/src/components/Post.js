@@ -56,6 +56,10 @@ const Post = ({ tripId }) => {
     }
   }, [post.postType]);
 
+  React.useEffect(() => {
+    setPost({ ...post, tripId: tripId });
+  }, [tripId]);
+
   const handleFromDate = (date) => {
     setPost({
       ...post,
@@ -72,7 +76,7 @@ const Post = ({ tripId }) => {
       await createPost({
         variables: {
           postType: post.postType,
-          tripId: tripId,
+          tripId: post.tripId,
           transportationType: post.transportationType,
           fromDate: post.fromDate,
           toDate: post.toDate,
@@ -82,7 +86,8 @@ const Post = ({ tripId }) => {
           description: post.description,
         },
       });
-      console.log(data);
+      //   console.log(data);
+      window.location.reload();
       if (error) {
         console.error(error);
       }

@@ -2,30 +2,30 @@ import { gql } from "@apollo/client";
 
 // export const GET_TRIPS
 
-export const QUERY_TRIPS = gql `
-query Query {
-  getTrips {
-    _id
-    createdAt
-    tripName
-    users {
+export const QUERY_TRIPS = gql`
+  query Query {
+    getTrips {
       _id
-      firstName
-      lastName
+      createdAt
+      tripName
+      users {
+        _id
+        firstName
+        lastName
+      }
+      tripPhoto
     }
-    tripPhoto
   }
-}
 `;
 
-export const QUERY_TRIP = gql`
-query GetTrip($tripId: ID!) {
-  getTrip(tripId: $tripId) {
-    tripName
-    tripPhoto
-    _id
+export const GET_TRIP = gql`
+  query getTrip($tripId: ID!) {
+    getTrip(tripId: $tripId) {
+      tripName
+      tripPhoto
+      _id
+    }
   }
-}
 `;
 
 export const GET_POSTS = gql`

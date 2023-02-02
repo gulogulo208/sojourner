@@ -8,9 +8,9 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-const Timeline = () => {
+const Timeline = ({ tripId }) => {
   const { loading, data } = useQuery(GET_POSTS, {
-    variables: { tripId: "63d9e868db5cebacf5be2da5" },
+    variables: { tripId: tripId },
   });
 
   if (loading) {

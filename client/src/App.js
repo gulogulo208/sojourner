@@ -2,13 +2,18 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
-import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
+import {
+  ApolloClient,
+  ApolloProvider,
+  InMemoryCache,
+  createHttpLink,
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 // import LeftNav from "./components/LeftNav";
 import AuthService from "./utils/auth";
 // import Error from './components/Error';
-import { setContext } from '@apollo/client/link/context';
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('id_token');

@@ -108,7 +108,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function MiniDrawer() {
+export default function LeftNav() {
   // VARIABLES
   const theme = useTheme();
   const tripModalStyle = {

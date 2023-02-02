@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useQuery, useLazyQuery } from "@apollo/client";
 import { GET_POSTS } from "../utils/queries";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -9,9 +9,20 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 const Timeline = ({ tripId }) => {
-  const { loading, data } = useQuery(GET_POSTS, {
+  const [getPosts, { loading, data }] = useLazyQuery(GET_POSTS, {
     variables: { tripId: tripId },
   });
+
+  let posts = [];
+  useEffect(() => {
+    getPosts({
+      variables: {
+        tripId: tripId,
+      },
+    });
+    posts = data?.getPosts;
+    console.log(posts);
+  }, [tripId]);
 
   if (loading) {
     return (
@@ -20,9 +31,6 @@ const Timeline = ({ tripId }) => {
       </>
     );
   }
-
-  const posts = data.getPosts;
-  console.log(posts);
 
   return (
     <>

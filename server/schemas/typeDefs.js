@@ -24,10 +24,10 @@ const typeDefs = gql`
     _id: ID!
     dateCreated: String!
     postType: String!
-    trip: Trip!
+    tripId: String!
     fromDate: String
     toDate: String
-    price: Float
+    price: String
     transportationType: String
     lodgingType: String
     activity: String
@@ -57,10 +57,10 @@ const typeDefs = gql`
     addUserToTrip(tripId: String!, userId: String!): Trip
     createPost(
       postType: String!
-      tripId: ID!
+      tripId: String!
       fromDate: String
       toDate: String
-      price: Float
+      price: String
       transportationType: String
       lodgingType: String
       activity: String

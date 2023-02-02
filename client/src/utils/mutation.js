@@ -55,11 +55,11 @@ export const ADD_USER_TO_TRIP = gql`
 export const CREATE_POST = gql`
   mutation CreatePost(
     $postType: String!
-    $tripId: ID!
+    $tripId: String!
     $transportationType: String
     $fromDate: String
     $toDate: String
-    $price: Float
+    $price: String
     $lodgingType: String
     $activity: String
     $description: String

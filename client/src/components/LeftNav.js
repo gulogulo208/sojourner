@@ -40,6 +40,7 @@ import LuggageIcon from "@mui/icons-material/Luggage";
 import Button from "@mui/material/Button";
 import { textAlign } from "@mui/system";
 import { CREATE_TRIP } from "../utils/mutation";
+import Post from "./Post";
 
 const drawerWidth = 240;
 
@@ -165,6 +166,10 @@ export default function MiniDrawer() {
   React.useEffect(() => {
     fetchTrips();
   }, [fetchTrips]);
+
+  React.useEffect(() => {
+    localStorage.setItem("currentTrip", tripId);
+  }, [tripId]);
 
   // console.log(tripsData);
 
@@ -393,6 +398,7 @@ export default function MiniDrawer() {
           eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
           posuere sollicitudin aliquam ultrices sagittis orci a.
         </Typography> */}
+        <Post tripId={tripId} />
         {showTimeline ? <Timeline tripId={tripId} /> : ""}
       </Box>
     </Box>

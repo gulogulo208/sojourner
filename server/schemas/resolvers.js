@@ -25,15 +25,15 @@ const resolvers = {
       if (context.user) {
         try {
           const specificTrip = await Trip.find({
-            _id: args.tripId
-          }).populate('_id');
+            _id: args.tripId,
+          }).populate("_id");
 
           return specificTrip;
         } catch (error) {
           console.error(error);
         }
       }
-      throw new AuthenticationError('You must be logged in to view your trips')
+      throw new AuthenticationError("You must be logged in to view your trips");
     },
 
     getPosts: async (parent, { tripId }, context) => {
@@ -121,7 +121,7 @@ const resolvers = {
       if (context.user) {
         const post = await Post.create({
           postType: args.postType,
-          trip: args.tripId,
+          tripId: args.tripId,
           fromDate: args.fromDate,
           toDate: args.toDate,
           price: args.price,

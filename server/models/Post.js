@@ -12,7 +12,7 @@ const postSchema = new Schema({
     enum: ["Transportation", "Lodging", "Itinerary"],
     required: true,
   },
-  trip: {
+  tripId: {
     type: Schema.Types.ObjectId,
     ref: "Trip",
   },

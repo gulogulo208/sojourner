@@ -16,8 +16,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-// import InboxIcon from "@mui/icons-material/MoveToInbox";
-// import MailIcon from "@mui/icons-material/Mail";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -42,6 +40,7 @@ import { textAlign } from "@mui/system";
 import { CREATE_TRIP } from "../utils/mutation";
 import Post from "./Post";
 
+// MUI HELPERS
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -110,27 +109,8 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer() {
-  // const [selectedItemId, setSelectedItemId] = React.useState(null);
+  // VARIABLES
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-
-  const [openTripModal, setOpenTripModal] = React.useState(false);
-  const [tripName, setTripName] = React.useState("");
-  const handleOpenTripModal = () => setOpenTripModal(true);
-  const handleCloseTripModal = () => setOpenTripModal(false);
-
-  const [createTrip, { loading, data, error }] = useMutation(CREATE_TRIP);
-
-  const handleAddTrip = async () => {
-    await createTrip({
-      variables: {
-        tripName: tripName,
-      },
-    });
-
-    window.location.reload();
-  };
-
   const tripModalStyle = {
     position: "absolute",
     top: "50%",
@@ -144,6 +124,33 @@ export default function MiniDrawer() {
     borderRadius: "16px",
   };
 
+  // STATE
+  const [open, setOpen] = React.useState(false);
+  const [openTripModal, setOpenTripModal] = React.useState(false);
+  const [tripName, setTripName] = React.useState("");
+  const [tripId, setTripId] = React.useState(
+    localStorage.getItem("currentTrip")
+  );
+  const [showTimeline, setShowTimeline] = React.useState(false);
+
+  // QUERIES & MUTATIONS
+  const [createTrip, { loading, data, error }] = useMutation(CREATE_TRIP);
+  const [
+    fetchTrips,
+    { loading: tripsLoading, error: tripsError, data: tripsData },
+  ] = useLazyQuery(QUERY_TRIPS);
+
+  // HELPER FUNCTIONS
+  const handleAddTrip = async () => {
+    await createTrip({
+      variables: {
+        tripName: tripName,
+      },
+    });
+
+    window.location.reload();
+  };
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -152,21 +159,15 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
-  const [
-    fetchTrips,
-    { loading: tripsLoading, error: tripsError, data: tripsData },
-  ] = useLazyQuery(QUERY_TRIPS);
-
-  const [tripId, setTripId] = React.useState(
-    localStorage.getItem("currentTrip")
-  );
-  const [showTimeline, setShowTimeline] = React.useState(false);
-
   const handleTripId = (tripId) => {
     setTripId(tripId);
     setShowTimeline(true);
   };
 
+  const handleOpenTripModal = () => setOpenTripModal(true);
+  const handleCloseTripModal = () => setOpenTripModal(false);
+
+  // USE EFFECT
   React.useEffect(() => {
     fetchTrips();
   }, [fetchTrips]);
@@ -175,8 +176,7 @@ export default function MiniDrawer() {
     localStorage.setItem("currentTrip", tripId);
   }, [tripId]);
 
-  // console.log(tripsData);
-
+  // IF LOADING
   if (tripsLoading) {
     return "Still loading...";
   }
@@ -186,7 +186,6 @@ export default function MiniDrawer() {
   }
 
   const tripList = tripsData.getTrips || [];
-  // console.log(tripList);
 
   return (
     <Box sx={{ display: "flex" }}>

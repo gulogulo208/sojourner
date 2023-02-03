@@ -50,6 +50,72 @@ const PostItem = ({ post, user }) => {
         ) : (
           ""
         )}
+        {post.postType === "Lodging" ? (
+          <>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              {post.lodgingType}
+            </Typography>
+            <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
+              From: {post.fromDate}
+            </Typography>
+            <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
+              To: {post.toDate}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              ${post.price}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              {post.description}
+            </Typography>
+          </>
+        ) : (
+          ""
+        )}
+        {post.postType === "Itinerary" ? (
+          <>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              {post.activity}
+            </Typography>
+            <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
+              From: {post.fromDate}
+            </Typography>
+            <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
+              To: {post.toDate}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              ${post.price}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              {post.description}
+            </Typography>
+          </>
+        ) : (
+          ""
+        )}
       </CardContent>
       <CardActions>
         <Button size="small">Comment</Button>

@@ -4,6 +4,10 @@ import { GET_POSTS, GET_TRIP, GET_USER } from "../utils/queries";
 import CircularProgress from "@mui/material/CircularProgress";
 import CreatePost from "./CreatePost";
 import PostItem from "./PostItem";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
 
 const Timeline = ({ tripId }) => {
   const [getTrip, { loading: loadingTrip, data: tripData }] = useLazyQuery(
@@ -31,6 +35,7 @@ const Timeline = ({ tripId }) => {
   const [trip, setTrip] = useState({});
   const [posts, setPosts] = useState([]);
   const [showPosts, setShowPosts] = useState(false);
+  const [showAddUserModal, setShowAddUserModal] = useState(false);
 
   useEffect(() => {
     async function handleTripId() {
@@ -65,6 +70,7 @@ const Timeline = ({ tripId }) => {
       {showPosts ? (
         <>
           <h1>{trip.tripName}</h1>
+          <Button size="small">Add Friend</Button>
           <CreatePost tripId={tripId} />
           {posts.map((post, i) => {
             return <PostItem key={i} post={post} user={userData.getUser} />;

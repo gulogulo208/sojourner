@@ -11,8 +11,6 @@ import { setContext } from "@apollo/client/link/context";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import AuthService from "./utils/auth";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers";
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("id_token");

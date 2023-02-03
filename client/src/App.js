@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import LeftNav from "./components/LeftNav";
 import AuthService from "./utils/auth";
+
 // import Error from './components/Error';
 
 const client = new ApolloClient({

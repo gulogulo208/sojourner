@@ -7,6 +7,7 @@ import LeftNav from '../components/LeftNav'
 
 
 
+
 const Home = () => {
     console.log("I AM IN THE LANDING PAGE!")
     return (

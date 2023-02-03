@@ -1,14 +1,10 @@
-// import React, { useState, useEffect } from 'react';
-// import ButtonAppBar from '../components/Navbar';
-// import Auth from '../utils/auth';
-import { Link } from "react-router-dom";
-import LeftNav from "../components/LeftNav";
+import React from "react";
+import MainContainer from "../components/MainContainer";
 
 const Home = () => {
   return (
     <div>
-      <LeftNav />
-      <Link to="/login">Login</Link>
+      <MainContainer />
     </div>
   );
 };

@@ -10,9 +10,7 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-// import LeftNav from "./components/LeftNav";
 import AuthService from "./utils/auth";
-// import Error from './components/Error';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 

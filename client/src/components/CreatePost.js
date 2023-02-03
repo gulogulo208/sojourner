@@ -21,7 +21,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { useMutation } from "@apollo/client";
 import { CREATE_POST } from "../utils/mutation";
 
-const Post = ({ tripId }) => {
+const CreatePost = ({ tripId }) => {
   const [post, setPost] = React.useState({
     postType: "",
     tripId: tripId,
@@ -194,4 +194,4 @@ const Post = ({ tripId }) => {
   );
 };
 
-export default Post;
+export default CreatePost;

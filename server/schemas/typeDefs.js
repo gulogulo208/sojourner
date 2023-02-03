@@ -43,6 +43,7 @@ const typeDefs = gql`
     getTrips: [Trip]
     getTrip(tripId: ID!): Trip
     getPosts(tripId: ID!): [Post]
+    getUser: User
   }
 
   type Mutation {

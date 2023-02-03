@@ -22,7 +22,7 @@ import CardMedia from "@mui/material/CardMedia";
 import { CardActionArea, CircularProgress } from "@mui/material";
 import LandscapeRoundedIcon from "@mui/icons-material/LandscapeRounded";
 import Tooltip from "@mui/material/Tooltip";
-import { QUERY_TRIPS } from "../utils/queries";
+import { GET_TRIPS } from "../utils/queries";
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import HikingRoundedIcon from "@mui/icons-material/HikingRounded";
 import { Link } from "react-router-dom";
@@ -38,7 +38,7 @@ import LuggageIcon from "@mui/icons-material/Luggage";
 import Button from "@mui/material/Button";
 import { textAlign } from "@mui/system";
 import { CREATE_TRIP } from "../utils/mutation";
-import Post from "./Post";
+import CreatePost from "./CreatePost";
 
 // MUI HELPERS
 const drawerWidth = 240;
@@ -108,7 +108,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function LeftNav() {
+export default function MainContainer() {
   // VARIABLES
   const theme = useTheme();
   const tripModalStyle = {
@@ -128,17 +128,15 @@ export default function LeftNav() {
   const [open, setOpen] = React.useState(false);
   const [openTripModal, setOpenTripModal] = React.useState(false);
   const [tripName, setTripName] = React.useState("");
-  const [tripId, setTripId] = React.useState(
-    localStorage.getItem("currentTrip")
-  );
+  const [tripId, setTripId] = React.useState("");
   const [showTimeline, setShowTimeline] = React.useState(false);
 
   // QUERIES & MUTATIONS
   const [createTrip, { loading, data, error }] = useMutation(CREATE_TRIP);
   const [
-    fetchTrips,
+    getTrips,
     { loading: tripsLoading, error: tripsError, data: tripsData },
-  ] = useLazyQuery(QUERY_TRIPS);
+  ] = useLazyQuery(GET_TRIPS);
 
   // HELPER FUNCTIONS
   const handleAddTrip = async () => {
@@ -159,7 +157,7 @@ export default function LeftNav() {
     setOpen(false);
   };
 
-  const handleTripId = (tripId) => {
+  const handleTripClick = (tripId) => {
     setTripId(tripId);
     setShowTimeline(true);
   };
@@ -169,12 +167,8 @@ export default function LeftNav() {
 
   // USE EFFECT
   React.useEffect(() => {
-    fetchTrips();
-  }, [fetchTrips]);
-
-  React.useEffect(() => {
-    localStorage.setItem("currentTrip", tripId);
-  }, [tripId]);
+    getTrips();
+  }, [getTrips]);
 
   // IF LOADING
   if (tripsLoading) {
@@ -270,7 +264,7 @@ export default function LeftNav() {
           {tripList.map((trip, index) => (
             <Tooltip key={trip._id} title={trip.tripName} placement="right">
               <ListItem
-                onClick={() => handleTripId(trip._id)}
+                onClick={() => handleTripClick(trip._id)}
                 style={{ cursor: "pointer" }}
                 disablePadding
                 sx={{ display: "block" }}
@@ -372,8 +366,7 @@ export default function LeftNav() {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-        <Post tripId={tripId} />
-        {showTimeline ? <Timeline tripId={tripId} /> : ""}
+        {showTimeline && <Timeline tripId={tripId} />}
       </Box>
     </Box>
   );

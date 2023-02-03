@@ -2,11 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useQuery, useLazyQuery } from "@apollo/client";
 import { GET_POSTS, GET_TRIP } from "../utils/queries";
 import CircularProgress from "@mui/material/CircularProgress";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import CreatePost from "./CreatePost";
+import PostItem from "./PostItem";
 
 const Timeline = ({ tripId }) => {
   const [getTrip, { loading: loadingTrip, data: tripData }] = useLazyQuery(
@@ -27,13 +24,12 @@ const Timeline = ({ tripId }) => {
 
   const [trip, setTrip] = useState({});
   const [posts, setPosts] = useState([]);
+  const [showPosts, setShowPosts] = useState(false);
 
   useEffect(() => {
     async function handleTripId() {
       try {
-        console.log(tripId);
         await getTrip();
-
         await getPosts();
       } catch (error) {
         console.error(error);
@@ -45,7 +41,8 @@ const Timeline = ({ tripId }) => {
     if (!postsData) return;
     setTrip(tripData.getTrip);
     setPosts(postsData.getPosts);
-  }, [tripId]);
+    setShowPosts(true);
+  }, [tripId, getPosts, getTrip, postsData, tripData]);
 
   if (loadingPosts || loadingTrip) {
     return (
@@ -55,31 +52,20 @@ const Timeline = ({ tripId }) => {
     );
   }
 
-  console.log(trip);
-  console.log(posts);
+  // console.log(trip);
+  // console.log(posts);
   return (
     <>
-      {posts.map((post, i) => {
-        return (
-          <Card
-            key={i}
-            sx={{ maxWidth: 200, textAlign: "center", marginLeft: 50 }}
-          >
-            <CardContent>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.secondary"
-                gutterBottom
-              >
-                {post.postType}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small">{post.price}</Button>
-            </CardActions>
-          </Card>
-        );
-      })}
+      {showPosts ? (
+        <>
+          <CreatePost tripId={tripId} />
+          {posts.map((post, i) => {
+            return <PostItem key={i} post={post} />;
+          })}
+        </>
+      ) : (
+        ""
+      )}
     </>
   );
 };

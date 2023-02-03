@@ -49,6 +49,20 @@ const resolvers = {
 
       throw new AuthenticationError("You must be logged in to view posts");
     },
+
+    getUser: async (parent, args, context) => {
+      if (context.user) {
+        try {
+          const user = await User.findOne({ _id: context.user._id });
+
+          return user;
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      throw new AuthenticationError("You must be logged in to get a user");
+    },
   },
 
   Mutation: {

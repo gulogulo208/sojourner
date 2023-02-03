@@ -1,9 +1,7 @@
 import { gql } from "@apollo/client";
 
-// export const GET_TRIPS
-
-export const QUERY_TRIPS = gql`
-  query Query {
+export const GET_TRIPS = gql`
+  query getTrips {
     getTrips {
       _id
       createdAt
@@ -41,6 +39,16 @@ export const GET_POSTS = gql`
       activity
       description
       price
+    }
+  }
+`;
+
+export const GET_USER = gql`
+  query getUser {
+    getUser {
+      _id
+      firstName
+      lastName
     }
   }
 `;

@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import LeftNav from "./components/LeftNav";
 import AuthService from "./utils/auth";
+import Profile from './components/profile'
 // import Error from './components/Error';
 
 const client = new ApolloClient({
@@ -31,6 +32,7 @@ function App() {
             ) : (
               <Route path="/signup" element={<Signup />} />
             )}
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </Router>
       </ApolloProvider>

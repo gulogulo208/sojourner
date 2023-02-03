@@ -1,0 +1,11 @@
+#root {
+    min-height: 100vh;
+}
+
+main {
+    min-height: 100vh;
+}
+
+#contentContainer {
+    min-height: 100vh;
+}

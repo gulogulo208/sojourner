@@ -39,6 +39,7 @@ import Button from "@mui/material/Button";
 import { textAlign } from "@mui/system";
 import { CREATE_TRIP } from "../utils/mutation";
 import CreatePost from "./CreatePost";
+import StickyFooter from "./Footer";
 
 // MUI HELPERS
 const drawerWidth = 240;
@@ -364,10 +365,15 @@ export default function MainContainer() {
           </Link>
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      
+      <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8, mb: 2 }}>
         <DrawerHeader />
+        <Box sx={{id: "contentContainer"}}>
         {showTimeline && <Timeline tripId={tripId} />}
+        </Box>
+        <StickyFooter />
       </Box>
+      
     </Box>
   );
 }

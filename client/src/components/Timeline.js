@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useQuery, useLazyQuery } from "@apollo/client";
-import { GET_POSTS, GET_TRIP } from "../utils/queries";
+import { GET_POSTS, GET_TRIP, GET_USER } from "../utils/queries";
 import CircularProgress from "@mui/material/CircularProgress";
 import CreatePost from "./CreatePost";
 import PostItem from "./PostItem";
@@ -21,6 +21,12 @@ const Timeline = ({ tripId }) => {
       variables: { tripId: tripId },
     }
   );
+
+  const {
+    loading: loadingUser,
+    error: userError,
+    data: userData,
+  } = useQuery(GET_USER);
 
   const [trip, setTrip] = useState({});
   const [posts, setPosts] = useState([]);
@@ -44,7 +50,7 @@ const Timeline = ({ tripId }) => {
     setShowPosts(true);
   }, [tripId, getPosts, getTrip, postsData, tripData]);
 
-  if (loadingPosts || loadingTrip) {
+  if (loadingPosts || loadingTrip || loadingUser) {
     return (
       <>
         <CircularProgress />
@@ -58,9 +64,10 @@ const Timeline = ({ tripId }) => {
     <>
       {showPosts ? (
         <>
+          <h1>{trip.tripName}</h1>
           <CreatePost tripId={tripId} />
           {posts.map((post, i) => {
-            return <PostItem key={i} post={post} />;
+            return <PostItem key={i} post={post} user={userData.getUser} />;
           })}
         </>
       ) : (

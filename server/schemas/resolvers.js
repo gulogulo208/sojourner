@@ -114,14 +114,17 @@ const resolvers = {
       throw new AuthenticationError("You must be logged in to create a trip");
     },
 
-    addUserToTrip: async (parent, { tripId, userId, tripName }, context) => {
+    addUserToTrip: async (parent, { email, tripId }, context) => {
       if (context.user) {
-        const updatedTrip = await Trip.findByIdAndUpdate(tripId, {
-          $addToSet: { users: userId },
-        });
+        const updatedUser = await User.findOneAndUpdate(
+          { email: email },
+          {
+            $addToSet: { trips: tripId },
+          }
+        );
 
-        const updatedUser = await User.findByIdAndUpdate(userId, {
-          $addToSet: { trips: updatedTrip._id },
+        const updatedTrip = await Trip.findByIdAndUpdate(tripId, {
+          $addToSet: { users: updatedUser._id },
         });
 
         return updatedTrip;

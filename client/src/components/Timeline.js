@@ -4,6 +4,7 @@ import { GET_POSTS, GET_TRIP } from "../utils/queries";
 import CircularProgress from "@mui/material/CircularProgress";
 import CreatePost from "./CreatePost";
 import PostItem from "./PostItem";
+import Paper from '@mui/material/Paper';
 
 const Timeline = ({ tripId }) => {
   const [getTrip, { loading: loadingTrip, data: tripData }] = useLazyQuery(
@@ -56,6 +57,7 @@ const Timeline = ({ tripId }) => {
   // console.log(posts);
   return (
     <>
+    <Paper elevation={3} id="postPaper">
       {showPosts ? (
         <>
           <CreatePost tripId={tripId} />
@@ -66,6 +68,7 @@ const Timeline = ({ tripId }) => {
       ) : (
         ""
       )}
+    </Paper>
     </>
   );
 };

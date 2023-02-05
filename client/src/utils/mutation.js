@@ -45,9 +45,10 @@ export const CREATE_TRIP = gql`
 `;
 
 export const ADD_USER_TO_TRIP = gql`
-  mutation Mutation($tripId: String!, $userId: String!) {
-    addUserToTrip(tripId: $tripId, userId: $userId) {
+  mutation addUserToTrip($email: String!, $tripId: ID!) {
+    addUserToTrip(email: $email, tripId: $tripId) {
       _id
+      tripName
     }
   }
 `;

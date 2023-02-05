@@ -56,8 +56,10 @@ const typeDefs = gql`
       password: String!
     ): Auth
     login(email: String!, password: String!): Auth
+
     createTrip(tripName: String!, tripDate: String!): Trip
     addUserToTrip(tripId: String!, userId: String!): Trip
+
     createPost(
       postType: String!
       tripId: String!

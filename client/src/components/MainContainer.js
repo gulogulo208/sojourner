@@ -231,10 +231,14 @@ export default function MainContainer() {
                 marginTop: "1.5rem",
               }}
             >
-              <Button sx={{ textAlign: "center" }} onClick={handleAddTrip}>
+              {loading 
+              ? <CircularProgress sx={{ml: '5px'}}/> 
+              : <Button sx={{ textAlign: "center" }} onClick={handleAddTrip}>
                 Add Trip{" "}
               </Button>
+              }
             </Box>
+            
           </Box>
         </Fade>
       </Modal>

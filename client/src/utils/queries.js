@@ -1,9 +1,7 @@
 import { gql } from "@apollo/client";
 
-// export const GET_TRIPS
-
 export const GET_TRIPS = gql`
-  query Query {
+  query getTrips {
     getTrips {
       _id
       createdAt
@@ -13,16 +11,44 @@ export const GET_TRIPS = gql`
         firstName
         lastName
       }
+      tripPhoto
+    }
+  }
+`;
+
+export const GET_TRIP = gql`
+  query getTrip($tripId: ID!) {
+    getTrip(tripId: $tripId) {
+      tripName
+      tripPhoto
+      _id
     }
   }
 `;
 
 export const GET_POSTS = gql`
-  query GetPosts($tripId: ID!) {
+  query getPosts($tripId: ID!) {
     getPosts(tripId: $tripId) {
       _id
       dateCreated
       postType
+      fromDate
+      toDate
+      transportationType
+      lodgingType
+      activity
+      description
+      price
+    }
+  }
+`;
+
+export const GET_USER = gql`
+  query getUser {
+    getUser {
+      _id
+      firstName
+      lastName
     }
   }
 `;

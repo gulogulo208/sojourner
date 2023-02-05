@@ -24,10 +24,10 @@ const typeDefs = gql`
     _id: ID!
     dateCreated: String!
     postType: String!
-    trip: Trip!
+    tripId: String!
     fromDate: String
     toDate: String
-    price: Float
+    price: String
     transportationType: String
     lodgingType: String
     activity: String
@@ -41,7 +41,9 @@ const typeDefs = gql`
 
   type Query {
     getTrips: [Trip]
+    getTrip(tripId: ID!): Trip
     getPosts(tripId: ID!): [Post]
+    getUser: User
   }
 
   type Mutation {
@@ -53,13 +55,13 @@ const typeDefs = gql`
     ): Auth
     login(email: String!, password: String!): Auth
     createTrip(tripName: String!): Trip
-    addUserToTrip(tripId: String!, userId: String!): Trip
+    addUserToTrip(email: String!, tripId: ID!): Trip
     createPost(
       postType: String!
-      tripId: ID!
+      tripId: String!
       fromDate: String
       toDate: String
-      price: Float
+      price: String
       transportationType: String
       lodgingType: String
       activity: String

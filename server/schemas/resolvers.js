@@ -21,10 +21,25 @@ const resolvers = {
       throw new AuthenticationError("You must be logged in to view trips");
     },
 
+    getTrip: async (parent, { tripId }, context) => {
+      if (context.user) {
+        try {
+          const specificTrip = await Trip.findOne({
+            _id: tripId,
+          });
+
+          return specificTrip;
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      throw new AuthenticationError("You must be logged in to view your trips");
+    },
+
     getPosts: async (parent, { tripId }, context) => {
       if (context.user) {
         try {
-          const tripPosts = await Post.find({ trip: tripId });
+          const tripPosts = await Post.find({ tripId: tripId });
 
           return tripPosts;
         } catch (error) {
@@ -33,6 +48,20 @@ const resolvers = {
       }
 
       throw new AuthenticationError("You must be logged in to view posts");
+    },
+
+    getUser: async (parent, args, context) => {
+      if (context.user) {
+        try {
+          const user = await User.findOne({ _id: context.user._id });
+
+          return user;
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      throw new AuthenticationError("You must be logged in to get a user");
     },
   },
 
@@ -85,14 +114,17 @@ const resolvers = {
       throw new AuthenticationError("You must be logged in to create a trip");
     },
 
-    addUserToTrip: async (parent, { tripId, userId, tripName }, context) => {
+    addUserToTrip: async (parent, { email, tripId }, context) => {
       if (context.user) {
-        const updatedTrip = await Trip.findByIdAndUpdate(tripId, {
-          $addToSet: { users: userId },
-        });
+        const updatedUser = await User.findOneAndUpdate(
+          { email: email },
+          {
+            $addToSet: { trips: tripId },
+          }
+        );
 
-        const updatedUser = await User.findByIdAndUpdate(userId, {
-          $addToSet: { trips: updatedTrip._id },
+        const updatedTrip = await Trip.findByIdAndUpdate(tripId, {
+          $addToSet: { users: updatedUser._id },
         });
 
         return updatedTrip;
@@ -106,7 +138,7 @@ const resolvers = {
       if (context.user) {
         const post = await Post.create({
           postType: args.postType,
-          trip: args.tripId,
+          tripId: args.tripId,
           fromDate: args.fromDate,
           toDate: args.toDate,
           price: args.price,

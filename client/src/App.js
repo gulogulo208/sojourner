@@ -11,6 +11,7 @@ import { setContext } from "@apollo/client/link/context";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import AuthService from "./utils/auth";
+// import Error from './components/Error';
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("id_token");

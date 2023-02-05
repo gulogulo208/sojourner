@@ -116,33 +116,59 @@ function Login(props) {
               onSubmit={handleFormSubmit}
               sx={{ mt: 1 }}
             >
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                onChange={handleChange}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={handleChange}
-              />
+              {error
+                ? <TextField
+                  error
+                  margin="normal"
+                  fullWidth
+                  id="outlined-error"
+                  name="email"
+                  label="Email Address"
+                  autoFocus
+                  onChange={handleChange}
+                  defaultValue=""
+                />
+                : <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                  onChange={handleChange}
+                />
+              }
+              {error
+                ? <TextField
+                  error
+                  margin="normal"
+                  fullWidth
+                  name="password"
+                  type="password"
+                  id="outlined-error-helper-text"
+                  label="password"
+                  defaultValue=""
+                  helperText="Invalid Credentials"
+                  onChange={handleChange}
+                />
+                : < TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  onChange={handleChange}
+                />
+              }
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              {error ? <Typography>Invalid credentials</Typography> : null}
               <Button
                 type="submit"
                 fullWidth

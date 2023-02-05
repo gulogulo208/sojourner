@@ -38,9 +38,14 @@ const resolvers = {
 
     getUpcomingTrips: async (parent, {tripDate}, context) => {
       const currentDate = new Date();
+      const formattedDate = currentDate.toLocaleDateString('en-US', {
+        month: "2-digit", 
+        day: "2-digit", 
+        year: "numeric"
+      })
       if (context.user){
         try {
-          const upcomingTrips = await Trip.find({tripDate: {$gte: currentDate }}).populate("posts");
+          const upcomingTrips = await Trip.find({tripDate: {$gte: formattedDate }}).populate("posts");
           return upcomingTrips
         } catch (error) {
           console.error(error)

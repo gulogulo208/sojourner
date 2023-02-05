@@ -1,0 +1,75 @@
+:root {
+  --star-command-blue: #2274a5ff;
+  --eggshell: #e7dfc6ff;
+  --alice-blue: #e9f1f7ff;
+  --rich-black-fogra-29: #131b23ff;
+  --french-bistre: #816c61ff;
+}
+
+#root {
+  min-height: 100vh;
+  background-color: var(--rich-black-fogra-29);
+}
+
+#toolBar {
+    background-color: var(--star-command-blue);
+}
+
+#drawer > div {
+    background-color: var(--alice-blue);
+}
+
+#drawerHeader{
+    background: var(--alice-blue);
+}
+
+
+#drawer > div > ul {
+    background-color: var(--alice-blue);
+    /* display: none; */
+    margin: 0px;
+}
+
+main {
+  /* min-height: 100vh; */
+  padding: 0px;
+}
+
+#mainContainer {
+  padding: 0px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  width: 100%;
+}
+
+#contentContainer {
+  min-height: 100vh;
+}
+
+#postContainer {
+  margin-left: 0px;
+  margin-right: 0px;
+  width: 100%;
+  margin-top: 5rem;
+  align-self: stretch;
+  flex-grow: 1;
+  align-self: center;
+  /* padding-left: 2rem;
+  padding-right: 1rem; */
+}
+
+#postPaper {
+  padding: 2rem;
+  background-color: var(--star-command-blue);
+}
+
+#footer {
+    background-color: var(--french-bistre);
+    color: var(--eggshell)
+}
+
+.footerTypography{
+    color: var(--eggshell);
+    display: none;
+    font-weight: bold;
+}

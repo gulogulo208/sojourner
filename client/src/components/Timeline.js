@@ -4,12 +4,14 @@ import { GET_POSTS, GET_TRIP, GET_USER } from "../utils/queries";
 import CircularProgress from "@mui/material/CircularProgress";
 import CreatePost from "./CreatePost";
 import PostItem from "./PostItem";
+import Paper from '@mui/material/Paper';
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { ADD_USER_TO_TRIP } from "../utils/mutation";
+
 
 const Timeline = ({ tripId }) => {
   const [getTrip, { loading: loadingTrip, data: tripData }] = useLazyQuery(
@@ -98,6 +100,7 @@ const Timeline = ({ tripId }) => {
   // console.log(posts);
   return (
     <>
+    <Paper elevation={3} id="postPaper">
       {showPosts ? (
         <>
           <h1>{trip.tripName}</h1>
@@ -135,6 +138,7 @@ const Timeline = ({ tripId }) => {
       ) : (
         ""
       )}
+    </Paper>
     </>
   );
 };

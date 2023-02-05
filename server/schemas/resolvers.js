@@ -36,6 +36,18 @@ const resolvers = {
       throw new AuthenticationError("You must be logged in to view your trips");
     },
 
+    getUpcomingTrips: async (parent, {tripDate}, context) => {
+      const currentDate = new Date();
+      if (context.user){
+        try {
+          const upcomingTrips = await Trip.find({tripDate: {$gte: currentDate }}).populate("posts");
+          return upcomingTrips
+        } catch (error) {
+          console.error(error)
+        }
+      }
+    },
+ 
     getPosts: async (parent, { tripId }, context) => {
       if (context.user) {
         try {
@@ -91,12 +103,13 @@ const resolvers = {
       return { token, user };
     },
 
-    createTrip: async (parent, { tripName }, context) => {
+    createTrip: async (parent, { tripName, tripDate }, context) => {
       if (context.user) {
         const tripPhoto = await createTripPhoto(tripName);
 
         const trip = await Trip.create({
           tripName,
+          tripDate,
           tripPhoto,
         });
 

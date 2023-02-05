@@ -39,6 +39,11 @@ import Button from "@mui/material/Button";
 import { textAlign } from "@mui/system";
 import { CREATE_TRIP } from "../utils/mutation";
 import CreatePost from "./CreatePost";
+import Container from "@mui/material/Container";
+// import StickyFooter from "./Footer";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import MUILink from "@mui/material/Link";
+import Paper from '@mui/material/Paper';
 
 // MUI HELPERS
 const drawerWidth = 240;
@@ -90,6 +95,11 @@ const AppBar = styled(MuiAppBar, {
     }),
   }),
 }));
+
+const MainStyle = () => ({
+  padding: 0,
+  marginBottom: 0,
+});
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -234,7 +244,7 @@ export default function MainContainer() {
       </Modal>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar>
+        <Toolbar id="toolBar">
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -252,8 +262,8 @@ export default function MainContainer() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open} sx={{}}>
-        <DrawerHeader>
+      <Drawer id="drawer" variant="permanent" open={open} sx={{}}>
+        <DrawerHeader id="drawerHeader">
           <Typography variant="h6">Your Trips</Typography>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
@@ -368,10 +378,81 @@ export default function MainContainer() {
           </Link>
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
-        {showTimeline && <Timeline tripId={tripId} />}
+
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 1,
+          mt: 2,
+          mb: 2,
+          display: "flex",
+          flexDirection: "column",
+          minHeight: "100vh",
+          width: "100%",
+        }}
+        id="mainContainer"
+      >
+        {/* <DrawerHeader /> */}
+        <Container
+          component="main"
+          // sx={{ mt: 8, mb: 2, mr: 0, ml: 0, width: "100%" }}
+          id="postContainer"
+        >
+          {showTimeline && <Timeline tripId={tripId} />}
+
+        </Container>
+        <Box
+          component="footer"
+          id="footer"
+          sx={{
+            py: 3,
+            px: 2,
+            mt: "auto",
+            backgroundColor: (theme) =>
+              theme.palette.mode === "light"
+                ? theme.palette.grey[200]
+                : theme.palette.grey[800],
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-around"
+          }}
+        >
+          {/* <Container maxWidth="lg"> */}
+            <Typography variant="body1" classes={"footerTypography"}>
+              <MUILink
+                color="inherit"
+                href="https://github.com/gulogulo208/sojourner"
+              >
+              </MUILink>
+              <Typography
+                variant="body2"
+                // color="text.secondary"
+                style={{ display: "block",}}
+              >
+                {"Copyright © "}
+                <MUILink
+                  color="inherit"
+                  href="https://github.com/gulogulo208/sojourner"
+                >
+                  Sojourner
+                </MUILink>{" "}
+                {new Date().getFullYear()}
+                {"."}
+              </Typography>
+            </Typography>
+            <Typography variant="body2" classes={"footerTypography"}
+                // color="text.secondary"
+                style={{ display: "block" }}>
+                  <GitHubIcon sx={{mr: 1}} />Created by: Jackson Farren, Theodore Elgee, Naveed Mahmoudian & James Porter
+            </Typography>
+            {/* <Copyright /> */}
+          {/* </Container> */}
+        </Box>
       </Box>
+      {/* </Box> */}
+      {/* <StickyFooter /> */}
+      {/* </Box> */}
     </Box>
   );
 }

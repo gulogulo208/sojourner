@@ -53,6 +53,15 @@ export const ADD_USER_TO_TRIP = gql`
   }
 `;
 
+export const REMOVE_USER_FROM_TRIP = gql`
+  mutation removeUserFromTrip($tripId: String!, $userId: String!) {
+    removeUserFromTrip(tripId: $tripId, userId: $userId) {
+      _id
+      tripName
+    }
+  }
+`;
+
 export const CREATE_POST = gql`
   mutation CreatePost(
     $postType: String!

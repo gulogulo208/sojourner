@@ -79,6 +79,22 @@ const resolvers = {
 
       throw new AuthenticationError("You must be logged in to get a user");
     },
+
+    getUsersOfTrip: async (parent, { tripId }, context) => {
+      if (context.user) {
+        try {
+          const tripUsers = await User.find({ trips: tripId });
+
+          return tripUsers;
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      throw new AuthenticationError(
+        "You must be logged in get users of a trip"
+      );
+    },
   },
 
   Mutation: {
@@ -155,6 +171,32 @@ const resolvers = {
       }
       throw new AuthenticationError(
         "You must be logged in to add a user to a trip"
+      );
+    },
+
+    removeUserFromTrip: async (parent, { tripId, userId }, context) => {
+      if (context.user) {
+        try {
+          const updatedTrip = await Trip.findByIdAndUpdate(
+            tripId,
+            { $pull: { users: userId } },
+            { new: true }
+          );
+
+          const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $pull: { trips: tripId } },
+            { new: true }
+          );
+
+          return updatedTrip;
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      throw new AuthenticationError(
+        "You must be logged in to remove a user from a trip"
       );
     },
 

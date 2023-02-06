@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
-import { GET_POSTS, GET_TRIP, GET_USER } from "../utils/queries";
+import {
+  GET_POSTS,
+  GET_TRIP,
+  GET_USER,
+  GET_USERS_OF_TRIP,
+} from "../utils/queries";
 import CircularProgress from "@mui/material/CircularProgress";
 import CreatePost from "./CreatePost";
 import PostItem from "./PostItem";
@@ -10,8 +15,11 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { ADD_USER_TO_TRIP } from "../utils/mutation";
+import { ADD_USER_TO_TRIP, REMOVE_USER_FROM_TRIP } from "../utils/mutation";
 import { useTripContext } from "../utils/globalState";
+import { List, ListItem } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
+import Auth from "../utils/auth";
 
 const Timeline = ({ tripId }) => {
   const [state, dispatch] = useTripContext();
@@ -32,13 +40,21 @@ const Timeline = ({ tripId }) => {
     }
   );
 
+  const [getUsersOfTrip, { loading: loadingUsers, data: usersData }] =
+    useLazyQuery(GET_USERS_OF_TRIP, { variables: { tripId: currentTripId } });
+
   const [addUserToTrip, { data: newUserData }] = useMutation(ADD_USER_TO_TRIP);
+
+  const [removeUserFromTrip, { data: updatedTripData }] = useMutation(
+    REMOVE_USER_FROM_TRIP
+  );
 
   const [trip, setTrip] = useState({});
   const [posts, setPosts] = useState([]);
   const [showPosts, setShowPosts] = useState(false);
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [friendEmail, setFriendEmail] = useState("");
+  const [friends, setFriends] = useState([]);
 
   const handleOpenAddUserModal = () => setShowAddUserModal(true);
   const handleCloseAddUserModal = () => setShowAddUserModal(false);
@@ -48,6 +64,17 @@ const Timeline = ({ tripId }) => {
       variables: {
         email: friendEmail,
         tripId: currentTripId,
+      },
+    });
+
+    window.location.reload();
+  };
+
+  const handleRemoveFriend = async (userId) => {
+    await removeUserFromTrip({
+      variables: {
+        tripId: currentTripId,
+        userId: userId,
       },
     });
 
@@ -71,6 +98,7 @@ const Timeline = ({ tripId }) => {
       try {
         await getTrip();
         await getPosts();
+        await getUsersOfTrip();
       } catch (error) {
         console.error(error);
       }
@@ -79,12 +107,24 @@ const Timeline = ({ tripId }) => {
 
     if (!tripData) return;
     if (!postsData) return;
+    if (!usersData) return;
     setTrip(tripData.getTrip);
     setPosts(postsData.getPosts);
+    setFriends(usersData.getUsersOfTrip);
     setShowPosts(true);
-  }, [currentTripId, getPosts, getTrip, postsData, tripData]);
+  }, [
+    currentTripId,
+    getPosts,
+    getTrip,
+    getUsersOfTrip,
+    postsData,
+    tripData,
+    usersData,
+    addUserToTrip,
+    removeUserFromTrip,
+  ]);
 
-  if (loadingPosts || loadingTrip) {
+  if (loadingPosts || loadingTrip || loadingUsers) {
     return (
       <>
         <CircularProgress />
@@ -111,6 +151,23 @@ const Timeline = ({ tripId }) => {
             >
               Add Friend
             </Button>
+            <List>
+              {friends.map((friend, i) => {
+                return (
+                  <ListItem key={i}>
+                    {friend.firstName} {friend.lastName}
+                    {friend._id !== Auth.getProfile().data._id ? (
+                      <ClearIcon
+                        onClick={() => handleRemoveFriend(friend._id)}
+                        sx={{ ":hover": { cursor: "pointer" } }}
+                      />
+                    ) : (
+                      " (me)"
+                    )}
+                  </ListItem>
+                );
+              })}
+            </List>
             <Modal
               open={showAddUserModal}
               onClose={handleCloseAddUserModal}

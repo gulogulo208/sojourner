@@ -67,3 +67,13 @@ export const GET_USER = gql`
     }
   }
 `;
+
+export const GET_USERS_OF_TRIP = gql`
+  query getUsersOfTrip($tripId: ID!) {
+    getUsersOfTrip(tripId: $tripId) {
+      _id
+      firstName
+      lastName
+    }
+  }
+`;

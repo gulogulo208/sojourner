@@ -47,6 +47,7 @@ const typeDefs = gql`
     getUpcomingTrips(tripDate: String!): [Trip]
     getPosts(tripId: ID!): [Post]
     getUser: User
+    getUsersOfTrip(tripId: ID!): [User]
   }
 
   type Mutation {
@@ -74,6 +75,8 @@ const typeDefs = gql`
       activity: String
       description: String
     ): Post
+
+    removeUserFromTrip(tripId: String!, userId: String!): Trip
   }
 `;
 

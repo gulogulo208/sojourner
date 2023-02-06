@@ -11,10 +11,6 @@ const tripSchema = new Schema({
     type: String,
     required: true,
   },
-  tripDate: {
-    type: Date,
-    required: true,
-  },
   tripPhoto: {
     type: String,
   },

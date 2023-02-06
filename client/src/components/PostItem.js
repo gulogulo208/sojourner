@@ -5,14 +5,14 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-const PostItem = ({ post, user }) => {
+const PostItem = ({ post }) => {
   return (
     <Card
       sx={{ maxWidth: 500, textAlign: "center", marginLeft: 65, marginTop: 5 }}
     >
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
-          {user.firstName} {user.lastName}
+          {post.firstName} {post.lastName}
         </Typography>
         <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
           {post.postType}

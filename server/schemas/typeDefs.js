@@ -15,7 +15,6 @@ const typeDefs = gql`
     _id: ID!
     createdAt: String!
     tripName: String!
-    tripDate: String!
     tripPhoto: String
     users: [User]
     posts: [Post]
@@ -24,6 +23,8 @@ const typeDefs = gql`
   type Post {
     _id: ID!
     dateCreated: String!
+    firstName: String!
+    lastName: String!
     postType: String!
     tripId: String!
     fromDate: String
@@ -57,11 +58,13 @@ const typeDefs = gql`
     ): Auth
     login(email: String!, password: String!): Auth
 
-    createTrip(tripName: String!, tripDate: String!): Trip
-    addUserToTrip(tripId: String!, userId: String!): Trip
+    createTrip(tripName: String!): Trip
+    addUserToTrip(tripId: String!, email: String!): Trip
 
     createPost(
       postType: String!
+      firstName: String!
+      lastName: String!
       tripId: String!
       fromDate: String
       toDate: String

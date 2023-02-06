@@ -10,7 +10,9 @@ const resolvers = {
         try {
           const userTrips = await Trip.find({
             users: context.user._id,
-          }).populate("users");
+          })
+            .populate("users")
+            .populate("posts");
 
           return userTrips;
         } catch (error) {
@@ -36,18 +38,20 @@ const resolvers = {
       throw new AuthenticationError("You must be logged in to view your trips");
     },
 
-    getUpcomingTrips: async (parent, {tripDate}, context) => {
+    getUpcomingTrips: async (parent, { tripDate }, context) => {
       const currentDate = new Date();
-      if (context.user){
+      if (context.user) {
         try {
-          const upcomingTrips = await Trip.find({tripDate: {$gte: currentDate }}).populate("posts");
-          return upcomingTrips
+          const upcomingTrips = await Trip.find({
+            tripDate: { $gte: currentDate },
+          }).populate("posts");
+          return upcomingTrips;
         } catch (error) {
-          console.error(error)
+          console.error(error);
         }
       }
     },
- 
+
     getPosts: async (parent, { tripId }, context) => {
       if (context.user) {
         try {
@@ -103,25 +107,28 @@ const resolvers = {
       return { token, user };
     },
 
-    createTrip: async (parent, { tripName, tripDate }, context) => {
+    createTrip: async (parent, { tripName }, context) => {
       if (context.user) {
         const tripPhoto = await createTripPhoto(tripName);
 
         const trip = await Trip.create({
           tripName,
-          tripDate,
           tripPhoto,
-        });
-
-        await Trip.findOneAndUpdate(trip._id, {
-          $addToSet: { users: context.user._id },
         });
 
         await User.findByIdAndUpdate(context.user._id, {
           $addToSet: { trips: trip._id },
         });
 
-        return trip;
+        const createdTrip = await Trip.findOneAndUpdate(
+          trip._id,
+          {
+            $addToSet: { users: context.user._id },
+          },
+          { new: true }
+        );
+
+        return createdTrip;
       }
 
       throw new AuthenticationError("You must be logged in to create a trip");
@@ -136,9 +143,13 @@ const resolvers = {
           }
         );
 
-        const updatedTrip = await Trip.findByIdAndUpdate(tripId, {
-          $addToSet: { users: updatedUser._id },
-        });
+        const updatedTrip = await Trip.findByIdAndUpdate(
+          tripId,
+          {
+            $addToSet: { users: updatedUser._id },
+          },
+          { new: true }
+        );
 
         return updatedTrip;
       }
@@ -151,6 +162,8 @@ const resolvers = {
       if (context.user) {
         const post = await Post.create({
           postType: args.postType,
+          firstName: args.firstName,
+          lastName: args.lastName,
           tripId: args.tripId,
           fromDate: args.fromDate,
           toDate: args.toDate,
@@ -164,10 +177,12 @@ const resolvers = {
         await User.findOneAndUpdate(context.user._id, {
           $addToSet: { posts: post._id },
         });
-
-        await Trip.findOneAndUpdate(args.tripId, {
-          $addToSet: { posts: post._id },
-        });
+        await Trip.findOneAndUpdate(
+          { _id: args.tripId },
+          {
+            $addToSet: { posts: post._id },
+          }
+        );
 
         return post;
       }

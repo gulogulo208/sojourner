@@ -33,7 +33,7 @@ export const LOG_IN = gql`
   }
 `;
 export const CREATE_TRIP = gql`
-  mutation Mutation($tripName: String!) {
+  mutation createTrip($tripName: String!) {
     createTrip(tripName: $tripName) {
       tripName
       _id
@@ -45,7 +45,7 @@ export const CREATE_TRIP = gql`
 `;
 
 export const ADD_USER_TO_TRIP = gql`
-  mutation addUserToTrip($email: String!, $tripId: ID!) {
+  mutation addUserToTrip($email: String!, $tripId: String!) {
     addUserToTrip(email: $email, tripId: $tripId) {
       _id
       tripName
@@ -57,6 +57,8 @@ export const CREATE_POST = gql`
   mutation CreatePost(
     $postType: String!
     $tripId: String!
+    $firstName: String!
+    $lastName: String!
     $transportationType: String
     $fromDate: String
     $toDate: String
@@ -68,6 +70,8 @@ export const CREATE_POST = gql`
     createPost(
       postType: $postType
       tripId: $tripId
+      firstName: $firstName
+      lastName: $lastName
       transportationType: $transportationType
       fromDate: $fromDate
       toDate: $toDate

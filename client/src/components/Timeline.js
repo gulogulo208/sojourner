@@ -4,21 +4,23 @@ import { GET_POSTS, GET_TRIP, GET_USER } from "../utils/queries";
 import CircularProgress from "@mui/material/CircularProgress";
 import CreatePost from "./CreatePost";
 import PostItem from "./PostItem";
-import Paper from '@mui/material/Paper';
+import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { ADD_USER_TO_TRIP } from "../utils/mutation";
-
+import { useTripContext } from "../utils/globalState";
 
 const Timeline = ({ tripId }) => {
+  const [state, dispatch] = useTripContext();
+  const { currentTripId } = state;
   const [getTrip, { loading: loadingTrip, data: tripData }] = useLazyQuery(
     GET_TRIP,
     {
       variables: {
-        tripId: tripId,
+        tripId: currentTripId,
       },
     }
   );
@@ -26,15 +28,9 @@ const Timeline = ({ tripId }) => {
   const [getPosts, { loading: loadingPosts, data: postsData }] = useLazyQuery(
     GET_POSTS,
     {
-      variables: { tripId: tripId },
+      variables: { tripId: currentTripId },
     }
   );
-
-  const {
-    loading: loadingUser,
-    error: userError,
-    data: userData,
-  } = useQuery(GET_USER);
 
   const [addUserToTrip, { data: newUserData }] = useMutation(ADD_USER_TO_TRIP);
 
@@ -51,7 +47,7 @@ const Timeline = ({ tripId }) => {
     await addUserToTrip({
       variables: {
         email: friendEmail,
-        tripId: tripId,
+        tripId: currentTripId,
       },
     });
 
@@ -86,9 +82,9 @@ const Timeline = ({ tripId }) => {
     setTrip(tripData.getTrip);
     setPosts(postsData.getPosts);
     setShowPosts(true);
-  }, [tripId, getPosts, getTrip, postsData, tripData]);
+  }, [currentTripId, getPosts, getTrip, postsData, tripData]);
 
-  if (loadingPosts || loadingTrip || loadingUser) {
+  if (loadingPosts || loadingTrip) {
     return (
       <>
         <CircularProgress />
@@ -100,45 +96,57 @@ const Timeline = ({ tripId }) => {
   // console.log(posts);
   return (
     <>
-    <Paper elevation={3} id="postPaper">
-      {showPosts ? (
-        <>
-          <h1>{trip.tripName}</h1>
-          <Button size="small" onClick={handleOpenAddUserModal}>
-            Add Friend
-          </Button>
-          <Modal
-            open={showAddUserModal}
-            onClose={handleCloseAddUserModal}
-            aria-labelledby="add-user-modal-title"
-            aria-describedby="add-user-modal-description"
-          >
-            <Box sx={addUserModalStyle}>
-              <Typography id="add-user-modal-title" variant="h6" component="h2">
-                Add a Friend to your Trip
-              </Typography>
-              <TextField
-                id="add-user-modal-description"
-                label="Friend's Email"
-                variant="outlined"
-                value={friendEmail}
-                onChange={(e) => setFriendEmail(e.target.value)}
-                fullWidth
-              />
-              <Button size="small" onClick={handleAddUser}>
-                Invite
-              </Button>
-            </Box>
-          </Modal>
-          <CreatePost tripId={tripId} />
-          {posts.map((post, i) => {
-            return <PostItem key={i} post={post} user={userData.getUser} />;
-          })}
-        </>
-      ) : (
-        ""
-      )}
-    </Paper>
+      <Paper elevation={3} id="postPaper">
+        {showPosts ? (
+          <>
+            <h1>{trip.tripName}</h1>
+            <Button
+              size="small"
+              sx={{
+                color: "black",
+                fontStyle: "bold",
+                border: "2px solid black",
+              }}
+              onClick={handleOpenAddUserModal}
+            >
+              Add Friend
+            </Button>
+            <Modal
+              open={showAddUserModal}
+              onClose={handleCloseAddUserModal}
+              aria-labelledby="add-user-modal-title"
+              aria-describedby="add-user-modal-description"
+            >
+              <Box sx={addUserModalStyle}>
+                <Typography
+                  id="add-user-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
+                  Add a Friend to your Trip
+                </Typography>
+                <TextField
+                  id="add-user-modal-description"
+                  label="Friend's Email"
+                  variant="outlined"
+                  value={friendEmail}
+                  onChange={(e) => setFriendEmail(e.target.value)}
+                  fullWidth
+                />
+                <Button size="small" onClick={handleAddUser}>
+                  Invite
+                </Button>
+              </Box>
+            </Modal>
+            <CreatePost tripId={currentTripId} />
+            {posts.map((post, i) => {
+              return <PostItem key={i} post={post} />;
+            })}
+          </>
+        ) : (
+          ""
+        )}
+      </Paper>
     </>
   );
 };

@@ -23,6 +23,7 @@ import { CREATE_POST } from "../utils/mutation";
 import { useTripContext } from "../utils/globalState";
 import { GET_USER } from "../utils/queries";
 import Auth from "../utils/auth";
+import { REFRESH_POSTS } from "../utils/actions";
 
 const CreatePost = () => {
   const [state, dispatch] = useTripContext();
@@ -31,8 +32,8 @@ const CreatePost = () => {
   const [post, setPost] = React.useState({
     postType: "",
     tripId: currentTripId,
-    firstName: Auth.getProfile().data.firstName,
-    lastName: Auth.getProfile().data.lastName,
+    firstName: "",
+    lastName: "",
     fromDate: "",
     toDate: "",
     price: 0,
@@ -81,7 +82,6 @@ const CreatePost = () => {
 
   const handlePost = async () => {
     try {
-      console.log(Auth.getProfile().data);
       await createPost({
         variables: {
           postType: post.postType,
@@ -98,7 +98,11 @@ const CreatePost = () => {
         },
       });
       //   console.log(data);
-      window.location.reload();
+      // window.location.reload();
+      dispatch({
+        type: REFRESH_POSTS,
+        refreshPosts: true,
+      });
       if (error) {
         console.error(error);
       }

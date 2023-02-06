@@ -6,12 +6,11 @@ const { Provider } = TripContext;
 
 const TripProvider = ({ value = [], ...props }) => {
   const [state, dispatch] = useTripReducer({
-    posts: [],
-    users: [],
+    tripPosts: [],
+    refreshPosts: false,
     userTrips: [],
     showTimeline: false,
     currentTripId: "",
-    currentTripName: "",
   });
 
   return <Provider value={[state, dispatch]} {...props} />;

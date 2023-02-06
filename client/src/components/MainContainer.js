@@ -47,7 +47,6 @@ import Paper from "@mui/material/Paper";
 import { useTripContext } from "../utils/globalState";
 import {
   UPDATE_USER_TRIPS,
-  UPDATE_CURRENT_TRIP_NAME,
   UPDATE_CURRENT_TRIP_ID,
   ADD_USER_TRIP,
 } from "../utils/actions";

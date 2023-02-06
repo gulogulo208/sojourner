@@ -58,7 +58,7 @@ const resolvers = {
         try {
           const tripPosts = await Post.find({ tripId: tripId });
 
-          return tripPosts;
+          return tripPosts.reverse();
         } catch (error) {
           console.error(error);
         }

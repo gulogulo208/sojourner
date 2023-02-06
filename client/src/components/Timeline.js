@@ -23,7 +23,7 @@ import Auth from "../utils/auth";
 
 const Timeline = ({ tripId }) => {
   const [state, dispatch] = useTripContext();
-  const { currentTripId } = state;
+  const { currentTripId, tripPosts, refreshPosts } = state;
   const [getTrip, { loading: loadingTrip, data: tripData }] = useLazyQuery(
     GET_TRIP,
     {
@@ -94,22 +94,20 @@ const Timeline = ({ tripId }) => {
   };
 
   useEffect(() => {
-    async function handleTripId() {
-      try {
-        await getTrip();
-        await getPosts();
-        await getUsersOfTrip();
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    handleTripId();
+    getTrip();
+    getPosts();
+    getUsersOfTrip();
 
     if (!tripData) return;
     if (!postsData) return;
     if (!usersData) return;
     setTrip(tripData.getTrip);
-    setPosts(postsData.getPosts);
+    console.log("TIMELINE RERENDER");
+    setPosts(tripPosts);
+    dispatch({
+      type: "UPDATE_TRIP_POSTS",
+      tripPosts: postsData.getPosts,
+    });
     setFriends(usersData.getUsersOfTrip);
     setShowPosts(true);
   }, [
@@ -122,6 +120,9 @@ const Timeline = ({ tripId }) => {
     usersData,
     addUserToTrip,
     removeUserFromTrip,
+    dispatch,
+    tripPosts,
+    refreshPosts,
   ]);
 
   if (loadingPosts || loadingTrip || loadingUsers) {
@@ -205,8 +206,8 @@ const Timeline = ({ tripId }) => {
               </Box>
             </Modal>
             <CreatePost tripId={currentTripId} />
-            {posts.map((post, i) => {
-              return <PostItem key={i} post={post} />;
+            {tripPosts.map((post, i) => {
+              return <PostItem key={i} posts={post} />;
             })}
           </>
         ) : (

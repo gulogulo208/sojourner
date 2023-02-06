@@ -1,20 +1,17 @@
 import { useReducer } from "react";
 import {
-  UPDATE_POSTS,
-  UPDATE_USERS,
+  UPDATE_TRIP_POSTS,
   UPDATE_USER_TRIPS,
   ADD_USER_TRIP,
   SHOW_TIMELINE,
-  UPDATE_CURRENT_TRIP_NAME,
   UPDATE_CURRENT_TRIP_ID,
+  REFRESH_POSTS,
 } from "./actions";
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case UPDATE_POSTS:
-      return { ...state, posts: action.posts };
-    case UPDATE_USERS:
-      return { ...state, users: action.users };
+    case UPDATE_TRIP_POSTS:
+      return { ...state, tripPosts: action.tripPosts };
     case UPDATE_USER_TRIPS:
       return { ...state, userTrips: action.userTrips };
     case ADD_USER_TRIP:
@@ -25,10 +22,10 @@ export const reducer = (state, action) => {
         showTimeline: action.showTimeline,
         currentTripId: action.currentTripId,
       };
-    case UPDATE_CURRENT_TRIP_NAME:
-      return { ...state, currentTripName: action.currentTripName };
     case UPDATE_CURRENT_TRIP_ID:
       return { ...state, currentTripId: action.currentTripId };
+    case REFRESH_POSTS:
+      return { ...state, refreshPosts: action.refreshPosts };
     default:
       return state;
   }

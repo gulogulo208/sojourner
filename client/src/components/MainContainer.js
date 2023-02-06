@@ -43,7 +43,11 @@ import Container from "@mui/material/Container";
 // import StickyFooter from "./Footer";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import MUILink from "@mui/material/Link";
-import Paper from '@mui/material/Paper';
+import Paper from "@mui/material/Paper";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
 // MUI HELPERS
 const drawerWidth = 240;
@@ -138,11 +142,13 @@ export default function MainContainer() {
   const [open, setOpen] = React.useState(false);
   const [openTripModal, setOpenTripModal] = React.useState(false);
   const [tripName, setTripName] = React.useState("");
+  const [tripDate, setTripDate] = React.useState("");
   const [tripId, setTripId] = React.useState("");
   const [showTimeline, setShowTimeline] = React.useState(false);
 
   // QUERIES & MUTATIONS
   const [createTrip, { loading, data, error }] = useMutation(CREATE_TRIP);
+
   const [
     getTrips,
     { loading: tripsLoading, error: tripsError, data: tripsData },
@@ -153,6 +159,7 @@ export default function MainContainer() {
     await createTrip({
       variables: {
         tripName: tripName,
+        tripDate: tripDate,
       },
     });
 
@@ -212,7 +219,8 @@ export default function MainContainer() {
             <Box
               sx={{
                 display: "flex",
-                justifyContent: "center",
+                flexDirection: "column",
+                justifyContent: "space-between",
                 alignItems: "flex-end",
               }}
             >
@@ -223,6 +231,15 @@ export default function MainContainer() {
                 value={tripName}
                 onChange={(e) => setTripName(e.target.value)}
               />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DesktopDatePicker
+                  label="Pick Your Date"
+                  inputFormat="MM/DD/YYYY"
+                  value={tripDate ? dayjs(tripDate) : null}
+                  onChange={(date) => setTripDate(date.format("MM/DD/YYYY"))}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
             </Box>
             <Box
               sx={{
@@ -231,14 +248,14 @@ export default function MainContainer() {
                 marginTop: "1.5rem",
               }}
             >
-              {loading 
-              ? <CircularProgress sx={{ml: '5px'}}/> 
-              : <Button sx={{ textAlign: "center" }} onClick={handleAddTrip}>
-                Add Trip{" "}
-              </Button>
-              }
+              {loading ? (
+                <CircularProgress sx={{ ml: "5px" }} />
+              ) : (
+                <Button sx={{ textAlign: "center" }} onClick={handleAddTrip}>
+                  Add Trip{" "}
+                </Button>
+              )}
             </Box>
-            
           </Box>
         </Fade>
       </Modal>
@@ -400,7 +417,6 @@ export default function MainContainer() {
           id="postContainer"
         >
           {showTimeline && <Timeline tripId={tripId} />}
-
         </Container>
         <Box
           component="footer"
@@ -415,38 +431,42 @@ export default function MainContainer() {
                 : theme.palette.grey[800],
             display: "flex",
             flexDirection: "row",
-            justifyContent: "space-around"
+            justifyContent: "space-around",
           }}
         >
           {/* <Container maxWidth="lg"> */}
-            <Typography variant="body1" classes={"footerTypography"}>
+          <Typography variant="body1" classes={"footerTypography"}>
+            <MUILink
+              color="inherit"
+              href="https://github.com/gulogulo208/sojourner"
+            ></MUILink>
+            <Typography
+              variant="body2"
+              // color="text.secondary"
+              style={{ display: "block" }}
+            >
+              {"Copyright © "}
               <MUILink
                 color="inherit"
                 href="https://github.com/gulogulo208/sojourner"
               >
-              </MUILink>
-              <Typography
-                variant="body2"
-                // color="text.secondary"
-                style={{ display: "block",}}
-              >
-                {"Copyright © "}
-                <MUILink
-                  color="inherit"
-                  href="https://github.com/gulogulo208/sojourner"
-                >
-                  Sojourner
-                </MUILink>{" "}
-                {new Date().getFullYear()}
-                {"."}
-              </Typography>
+                Sojourner
+              </MUILink>{" "}
+              {new Date().getFullYear()}
+              {"."}
             </Typography>
-            <Typography variant="body2" classes={"footerTypography"}
-                // color="text.secondary"
-                style={{ display: "block" }}>
-                  <GitHubIcon sx={{mr: 1}} />Created by: Jackson Farren, Theodore Elgee, Naveed Mahmoudian & James Porter
-            </Typography>
-            {/* <Copyright /> */}
+          </Typography>
+          <Typography
+            variant="body2"
+            classes={"footerTypography"}
+            // color="text.secondary"
+            style={{ display: "block" }}
+          >
+            <GitHubIcon sx={{ mr: 1 }} />
+            Created by: Jackson Farren, Theodore Elgee, Naveed Mahmoudian &
+            James Porter
+          </Typography>
+          {/* <Copyright /> */}
           {/* </Container> */}
         </Box>
       </Box>

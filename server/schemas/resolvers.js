@@ -1,9 +1,11 @@
-const { AuthenticationError } = require("apollo-server-express");
+const { AuthenticationError, ApolloError } = require("apollo-server-express");
 const { User, Trip, Post } = require("../models");
 const { signToken } = require("../utils/auth");
 const { createTripPhoto } = require("../utils/createTripPhoto");
+const error = ApolloError
 
 const resolvers = {
+
   Query: {
     getTrips: async (parent, args, context) => {
       if (context.user) {
@@ -48,7 +50,7 @@ const resolvers = {
           const upcomingTrips = await Trip.find({tripDate: {$gte: formattedDate }}).populate("posts");
           return upcomingTrips
         } catch (error) {
-          console.error(error)
+          console.error(JSON.stringify(error, null, 2))
         }
       }
     },
@@ -110,23 +112,26 @@ const resolvers = {
 
     createTrip: async (parent, { tripName, tripDate }, context) => {
       if (context.user) {
-        const tripPhoto = await createTripPhoto(tripName);
-
-        const trip = await Trip.create({
-          tripName,
-          tripDate,
-          tripPhoto,
-        });
-
-        await Trip.findOneAndUpdate(trip._id, {
-          $addToSet: { users: context.user._id },
-        });
-
-        await User.findByIdAndUpdate(context.user._id, {
-          $addToSet: { trips: trip._id },
-        });
-
-        return trip;
+        try{
+          const tripPhoto = await createTripPhoto(tripName);
+  
+          const trip = await Trip.create({
+            tripName,
+            tripDate,
+            tripPhoto,
+          });
+  
+          await Trip.findOneAndUpdate(trip._id, {
+            $addToSet: { users: context.user._id },
+          });
+  
+          await User.findByIdAndUpdate(context.user._id, {
+            $addToSet: { trips: trip._id },
+          });
+          return trip;
+        } catch (error){
+          console.error(JSON.stringify(error, null, 2))
+        }
       }
 
       throw new AuthenticationError("You must be logged in to create a trip");

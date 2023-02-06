@@ -260,6 +260,10 @@ export default function MainContainer() {
 
   // const tripList = tripsData.getTrips || [];
 
+  if (loadingTrips) {
+    return <CircularProgress />;
+  }
+
   return (
     <Box sx={{ display: "flex" }}>
       <Modal

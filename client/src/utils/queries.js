@@ -32,6 +32,11 @@ export const GET_TRIPS = gql`
 export const GET_TRIP = gql`
   query getTrip($tripId: ID!) {
     getTrip(tripId: $tripId) {
+      createdBy {
+        _id
+        firstName
+        lastName
+      }
       tripName
       tripPhoto
       _id

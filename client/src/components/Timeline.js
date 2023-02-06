@@ -153,19 +153,28 @@ const Timeline = ({ tripId }) => {
             </Button>
             <List>
               {friends.map((friend, i) => {
-                return (
-                  <ListItem key={i}>
-                    {friend.firstName} {friend.lastName}
-                    {friend._id !== Auth.getProfile().data._id ? (
-                      <ClearIcon
-                        onClick={() => handleRemoveFriend(friend._id)}
-                        sx={{ ":hover": { cursor: "pointer" } }}
-                      />
-                    ) : (
-                      " (me)"
-                    )}
-                  </ListItem>
-                );
+                if (trip.createdBy._id === Auth.getProfile().data._id) {
+                  return (
+                    <ListItem key={i}>
+                      {friend.firstName} {friend.lastName}
+                      {friend._id !== Auth.getProfile().data._id ? (
+                        <ClearIcon
+                          onClick={() => handleRemoveFriend(friend._id)}
+                          sx={{ ":hover": { cursor: "pointer" } }}
+                        />
+                      ) : (
+                        " (me)"
+                      )}
+                    </ListItem>
+                  );
+                } else {
+                  return (
+                    <ListItem key={i}>
+                      {friend.firstName} {friend.lastName}
+                      {friend._id === Auth.getProfile().data._id ? " (me)" : ""}
+                    </ListItem>
+                  );
+                }
               })}
             </List>
             <Modal

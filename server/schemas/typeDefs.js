@@ -14,6 +14,7 @@ const typeDefs = gql`
   type Trip {
     _id: ID!
     createdAt: String!
+    createdBy: User!
     tripName: String!
     tripPhoto: String
     users: [User]

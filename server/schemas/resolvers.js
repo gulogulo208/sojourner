@@ -12,7 +12,8 @@ const resolvers = {
             users: context.user._id,
           })
             .populate("users")
-            .populate("posts");
+            .populate("posts")
+            .populate("createdBy");
 
           return userTrips;
         } catch (error) {
@@ -28,7 +29,7 @@ const resolvers = {
         try {
           const specificTrip = await Trip.findOne({
             _id: tripId,
-          });
+          }).populate("createdBy");
 
           return specificTrip;
         } catch (error) {
@@ -128,6 +129,7 @@ const resolvers = {
         const tripPhoto = await createTripPhoto(tripName);
 
         const trip = await Trip.create({
+          createdBy: context.user._id,
           tripName,
           tripPhoto,
         });

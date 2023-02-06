@@ -52,6 +52,7 @@ import {
   ADD_USER_TRIP,
 } from "../utils/actions";
 import TripItem from "./TripItem";
+import Auth from "../utils/auth";
 
 // MUI HELPERS
 const drawerWidth = 240;
@@ -198,6 +199,10 @@ export default function MainContainer() {
   const handleOpenTripModal = () => setOpenTripModal(true);
   const handleCloseTripModal = () => setOpenTripModal(false);
 
+  const handleLogout = () => {
+    Auth.logout();
+  };
+
   // USE EFFECT
   React.useEffect(() => {
     if (loadingTrips) {
@@ -309,7 +314,14 @@ export default function MainContainer() {
       </Modal>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar id="toolBar">
+        <Toolbar
+          id="toolBar"
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -323,8 +335,11 @@ export default function MainContainer() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Welcome, Sojourner
+            Welcome, {Auth.getProfile().data.firstName}
           </Typography>
+          <Button variant="small" onClick={handleLogout}>
+            Log Out
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer id="drawer" variant="permanent" open={open} sx={{}}>

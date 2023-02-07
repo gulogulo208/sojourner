@@ -52,6 +52,10 @@ import {
 } from "../utils/actions";
 import TripItem from "./TripItem";
 import Auth from "../utils/auth";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
 // MUI HELPERS
 const drawerWidth = 240;
@@ -148,6 +152,7 @@ export default function MainContainer() {
   const [open, setOpen] = React.useState(false);
   const [openTripModal, setOpenTripModal] = React.useState(false);
   const [tripName, setTripName] = React.useState("");
+  const [tripDate, setTripDate] = React.useState("");
   const [tripId, setTripId] = React.useState("");
   const [renderTimeline, setRenderTimeline] = React.useState(false);
   const [showTrips, setShowTrips] = React.useState(null);
@@ -177,6 +182,7 @@ export default function MainContainer() {
     await createTrip({
       variables: {
         tripName: tripName,
+        tripDate: tripDate,
       },
     });
     handleCloseTripModal();
@@ -264,7 +270,7 @@ export default function MainContainer() {
   }
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", id: "timeline" }}>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -284,7 +290,8 @@ export default function MainContainer() {
             <Box
               sx={{
                 display: "flex",
-                justifyContent: "center",
+                flexDirection: "column",
+                justifyContent: "space-between",
                 alignItems: "flex-end",
               }}
             >
@@ -296,6 +303,15 @@ export default function MainContainer() {
                 value={tripName}
                 onChange={(e) => setTripName(e.target.value)}
               />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DesktopDatePicker
+                  label="Pick Your Date"
+                  inputFormat="MM/DD/YYYY"
+                  value={tripDate ? dayjs(tripDate) : null}
+                  onChange={(date) => setTripDate(date.format("MM/DD/YYYY"))}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
             </Box>
             <Box
               sx={{
@@ -304,13 +320,12 @@ export default function MainContainer() {
                 marginTop: "1.5rem",
               }}
             >
-              {loadingCreateTrip ? (
-                <CircularProgress />
-              ) : (
-                <Button sx={{ textAlign: "center" }} onClick={handleAddTrip}>
-                  Add Trip{" "}
-                </Button>
-              )}
+              {loadingCreateTrip 
+              ? <CircularProgress sx={{ml: '5px'}}/> 
+              : <Button sx={{ textAlign: "center" }} onClick={handleAddTrip}>
+                Add Trip{" "}
+              </Button>
+              }
             </Box>
           </Box>
         </Fade>
@@ -432,7 +447,8 @@ export default function MainContainer() {
           // sx={{ mt: 8, mb: 2, mr: 0, ml: 0, width: "100%" }}
           id="postContainer"
         >
-          {showTimeline && <Timeline />}
+          {showTimeline && <Timeline tripId={tripId} />}
+
         </Container>
         <Box
           component="footer"
@@ -450,14 +466,14 @@ export default function MainContainer() {
             justifyContent: "space-around",
           }}
         >
-          {/* <Container maxWidth="lg"> */}
-          <Typography variant="body1" classes={"footerTypography"}>
+          {/* <Copyright /> */}
+          <Typography variant="body1" sx={{class: "footerTypography"}}>
             <MUILink
               color="inherit"
               href="https://github.com/gulogulo208/sojourner"
             ></MUILink>
             <Typography
-              variant="body2"
+              variant="body2" component="span"
               // color="text.secondary"
               style={{ display: "block" }}
             >
@@ -474,9 +490,8 @@ export default function MainContainer() {
           </Typography>
           <Typography
             variant="body2"
-            classes={"footerTypography"}
             // color="text.secondary"
-            style={{ display: "block" }}
+            style={{ display: "block", class: "footerTypography" }}
           >
             <GitHubIcon sx={{ mr: 1 }} />
             Created by: Jackson Farren, Theodore Elgee, Naveed Mahmoudian &

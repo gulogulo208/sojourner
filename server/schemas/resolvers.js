@@ -1,9 +1,11 @@
-const { AuthenticationError } = require("apollo-server-express");
+const { AuthenticationError, ApolloError } = require("apollo-server-express");
 const { User, Trip, Post } = require("../models");
 const { signToken } = require("../utils/auth");
 const { createTripPhoto } = require("../utils/createTripPhoto");
+const error = ApolloError
 
 const resolvers = {
+
   Query: {
     getTrips: async (parent, args, context) => {
       if (context.user) {
@@ -41,14 +43,17 @@ const resolvers = {
 
     getUpcomingTrips: async (parent, { tripDate }, context) => {
       const currentDate = new Date();
-      if (context.user) {
+      const formattedDate = currentDate.toLocaleDateString('en-US', {
+        month: "2-digit", 
+        day: "2-digit", 
+        year: "numeric"
+      })
+      if (context.user){
         try {
-          const upcomingTrips = await Trip.find({
-            tripDate: { $gte: currentDate },
-          }).populate("posts");
-          return upcomingTrips;
+          const upcomingTrips = await Trip.find({tripDate: {$gte: formattedDate }}).populate("posts");
+          return upcomingTrips
         } catch (error) {
-          console.error(error);
+          console.error(JSON.stringify(error, null, 2))
         }
       }
     },
@@ -124,30 +129,33 @@ const resolvers = {
       return { token, user };
     },
 
-    createTrip: async (parent, { tripName }, context) => {
+    createTrip: async (parent, { tripName, tripDate }, context) => {
       if (context.user) {
+        try {
         const tripPhoto = await createTripPhoto(tripName);
 
         const trip = await Trip.create({
           createdBy: context.user._id,
           tripName,
+          tripDate,
           tripPhoto,
+        });
+
+        await Trip.findOneAndUpdate(trip._id, {
+          $addToSet: { users: context.user._id },
         });
 
         await User.findByIdAndUpdate(context.user._id, {
           $addToSet: { trips: trip._id },
-        });
-
-        const createdTrip = await Trip.findOneAndUpdate(
-          trip._id,
-          {
-            $addToSet: { users: context.user._id },
-          },
-          { new: true }
+        }, 
+        { new: true}
         );
 
-        return createdTrip;
+        return trip;
+      } catch (error){
+        console.error(JSON.stringify(error, null, 2))
       }
+    }
 
       throw new AuthenticationError("You must be logged in to create a trip");
     },

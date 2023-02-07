@@ -73,6 +73,23 @@ export const GET_USER = gql`
   }
 `;
 
+export const GET_UPCOMINGTRIPS = gql`
+query GetUpcomingTrips($tripDate: String!) {
+  getUpcomingTrips(tripDate: $tripDate) {
+    tripName
+    posts {
+      fromDate
+      toDate
+      postType
+      transportationType
+      lodgingType
+      activity
+      description
+    }
+  }
+}
+`;
+
 export const GET_USERS_OF_TRIP = gql`
   query getUsersOfTrip($tripId: ID!) {
     getUsersOfTrip(tripId: $tripId) {

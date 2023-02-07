@@ -104,4 +104,14 @@ mutation Mutation($tripId: ID!) {
     _id
   }
 }
+`;
+
+export const REMOVE_POST = gql`
+mutation Mutation($postId: String!, $userId: String!) {
+  removePost(postId: $postId, userId: $userId) {
+    _id
+    firstName
+    description
+  }
+}
 `

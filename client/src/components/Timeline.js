@@ -140,7 +140,6 @@ const Timeline = ({ tripId }) => {
     if (!usersData) return;
     setTrip(tripData.getTrip);
     // console.log("TIMELINE RERENDER");
-    setPosts(tripPosts);
     dispatch({
       type: "UPDATE_TRIP_POSTS",
       tripPosts: postsData.getPosts,

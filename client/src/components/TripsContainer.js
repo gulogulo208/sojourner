@@ -11,6 +11,10 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { CREATE_TRIP } from "../utils/mutation";
 import Container from "@mui/material/Container";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 // import StickyFooter from "./Footer";
 import { useTripContext } from "../utils/globalState";
 import {
@@ -24,6 +28,7 @@ const TripsContainer = () => {
     const [showTrips, setShowTrips] = React.useState(null);
     const [openTripModal, setOpenTripModal] = React.useState(false);
     const [tripName, setTripName] = React.useState("");
+    const [tripDate, setTripDate] = React.useState("");
 
     const tripModalStyle = {
         position: "absolute",
@@ -57,6 +62,7 @@ const TripsContainer = () => {
         await createTrip({
             variables: {
                 tripName: tripName,
+                tripDate: tripDate,
             },
         });
         handleCloseTripModal();
@@ -134,6 +140,15 @@ const TripsContainer = () => {
                                 value={tripName}
                                 onChange={(e) => setTripName(e.target.value)}
                             />
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DesktopDatePicker
+                                    label="Pick Your Date"
+                                    inputFormat="MM/DD/YYYY"
+                                    value={tripDate ? dayjs(tripDate) : null}
+                                    onChange={(date) => setTripDate(date.format("MM/DD/YYYY"))}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider>
                         </Box>
                         <Box
                             sx={{

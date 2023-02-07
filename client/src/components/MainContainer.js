@@ -26,10 +26,6 @@ import MUILink from "@mui/material/Link";
 import { useTripContext } from "../utils/globalState";
 import Auth from "../utils/auth";
 import TripsContainer from "./TripsContainer";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
 
 // MUI HELPERS
 const drawerWidth = 240;

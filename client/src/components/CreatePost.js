@@ -21,19 +21,19 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_POST } from "../utils/mutation";
 import { useTripContext } from "../utils/globalState";
-import { GET_USER } from "../utils/queries";
+import { GET_POSTS, GET_USER } from "../utils/queries";
 import Auth from "../utils/auth";
-import { REFRESH_POSTS } from "../utils/actions";
+import { REFRESH_POSTS, UPDATE_TRIP_POSTS } from "../utils/actions";
 
 const CreatePost = () => {
   const [state, dispatch] = useTripContext();
-  const { currentTripId } = state;
+  const { currentTripId, tripPosts } = state;
 
   const [post, setPost] = React.useState({
     postType: "",
     tripId: currentTripId,
-    firstName: "",
-    lastName: "",
+    firstName: Auth.getProfile().data.firstName,
+    lastName: Auth.getProfile().data.lastName,
     fromDate: "",
     toDate: "",
     price: 0,
@@ -103,6 +103,7 @@ const CreatePost = () => {
         type: REFRESH_POSTS,
         refreshPosts: true,
       });
+      console.log(tripPosts);
       if (error) {
         console.error(error);
       }

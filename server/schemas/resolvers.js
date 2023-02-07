@@ -139,7 +139,7 @@ const resolvers = {
         });
 
         const createdTrip = await Trip.findOneAndUpdate(
-          trip._id,
+          {_id: trip._id},
           {
             $addToSet: { users: context.user._id },
           },

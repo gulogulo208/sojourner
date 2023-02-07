@@ -55,6 +55,7 @@ const Timeline = ({ tripId }) => {
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [friendEmail, setFriendEmail] = useState("");
   const [friends, setFriends] = useState([]);
+  const [renderPost, setRenderPost] = useState(null);
 
   const handleOpenAddUserModal = () => setShowAddUserModal(true);
   const handleCloseAddUserModal = () => setShowAddUserModal(false);
@@ -94,27 +95,39 @@ const Timeline = ({ tripId }) => {
   };
 
   useEffect(() => {
-    getTrip();
-    getPosts();
-    getUsersOfTrip();
+    const handleEffect = async () => {
+      await getTrip();
+      await getPosts();
+      await getUsersOfTrip();
 
-    if (!tripData) return;
-    if (!postsData) return;
-    if (!usersData) return;
-    setTrip(tripData.getTrip);
-    console.log("TIMELINE RERENDER");
-    setPosts(tripPosts);
-    dispatch({
-      type: "UPDATE_TRIP_POSTS",
-      tripPosts: postsData.getPosts,
-    });
-    setFriends(usersData.getUsersOfTrip);
-    setShowPosts(true);
+      if (!tripData) return;
+      if (!postsData) return;
+      if (!usersData) return;
+
+      console.log("QUERY", postsData);
+
+      setTrip(tripData.getTrip);
+      console.log("TIMELINE RERENDER");
+      /* setPosts(tripPosts); */
+      console.log("TRIP POSTS: ", tripPosts);
+      dispatch({
+        type: "UPDATE_TRIP_POSTS",
+        tripPosts: postsData.getPosts,
+      });
+      setFriends(usersData.getUsersOfTrip);
+      setShowPosts(true);
+      console.log("AFTER", tripPosts)
+      setRenderPost(
+        tripPosts.map((post, i) => {
+          return <PostItem key={i} posts={post} />;
+        })
+      )
+    }
+
+    handleEffect();
+
   }, [
     currentTripId,
-    getPosts,
-    getTrip,
-    getUsersOfTrip,
     postsData,
     tripData,
     usersData,
@@ -206,9 +219,7 @@ const Timeline = ({ tripId }) => {
               </Box>
             </Modal>
             <CreatePost tripId={currentTripId} />
-            {tripPosts.map((post, i) => {
-              return <PostItem key={i} posts={post} />;
-            })}
+            {renderPost}
           </>
         ) : (
           ""

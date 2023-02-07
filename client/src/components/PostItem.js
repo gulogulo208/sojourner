@@ -11,154 +11,152 @@ const PostItem = ({ posts }) => {
   const [state, dispatch] = useTripContext();
   const { tripPosts, refreshPosts } = state;
 
-  useEffect(() => {
-    console.log("POST ITEM RERENDER");
-    return (
-      <Card
-        sx={{
-          maxWidth: 500,
-          textAlign: "center",
-          marginLeft: 65,
-          marginTop: 5,
-        }}
-      >
-        <CardContent>
-          <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
-            {posts.firstName} {posts.lastName}
-          </Typography>
-          <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-            {posts.postType}
-          </Typography>
-          {posts.postType === "Transportation" ? (
-            <>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.secondary"
-                gutterBottom
-              >
-                {posts.transportationType}
-              </Typography>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.primary"
-                gutterBottom
-              >
-                From: {posts.fromDate}
-              </Typography>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.primary"
-                gutterBottom
-              >
-                To: {posts.toDate}
-              </Typography>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.secondary"
-                gutterBottom
-              >
-                ${posts.price}
-              </Typography>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.secondary"
-                gutterBottom
-              >
-                {posts.description}
-              </Typography>
-            </>
-          ) : (
-            ""
-          )}
-          {posts.postType === "Lodging" ? (
-            <>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.secondary"
-                gutterBottom
-              >
-                {posts.lodgingType}
-              </Typography>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.primary"
-                gutterBottom
-              >
-                From: {posts.fromDate}
-              </Typography>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.primary"
-                gutterBottom
-              >
-                To: {posts.toDate}
-              </Typography>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.secondary"
-                gutterBottom
-              >
-                ${posts.price}
-              </Typography>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.secondary"
-                gutterBottom
-              >
-                {posts.description}
-              </Typography>
-            </>
-          ) : (
-            ""
-          )}
-          {posts.postType === "Itinerary" ? (
-            <>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.secondary"
-                gutterBottom
-              >
-                {posts.activity}
-              </Typography>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.primary"
-                gutterBottom
-              >
-                From: {posts.fromDate}
-              </Typography>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.primary"
-                gutterBottom
-              >
-                To: {posts.toDate}
-              </Typography>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.secondary"
-                gutterBottom
-              >
-                ${posts.price}
-              </Typography>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.secondary"
-                gutterBottom
-              >
-                {posts.description}
-              </Typography>
-            </>
-          ) : (
-            ""
-          )}
-        </CardContent>
-        <CardActions>
-          <Button size="small">Comment</Button>
-        </CardActions>
-      </Card>
-    );
-  }, [refreshPosts, tripPosts]);
+  console.log("POST ITEM RERENDER");
+  return (
+    <Card
+      sx={{
+        maxWidth: 500,
+        textAlign: "center",
+        marginLeft: 65,
+        marginTop: 5,
+      }}
+    >
+      <CardContent>
+        <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
+          {posts.firstName} {posts.lastName}
+        </Typography>
+        <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+          {posts.postType}
+        </Typography>
+        {posts.postType === "Transportation" ? (
+          <>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              {posts.transportationType}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.primary"
+              gutterBottom
+            >
+              From: {posts.fromDate}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.primary"
+              gutterBottom
+            >
+              To: {posts.toDate}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              ${posts.price}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              {posts.description}
+            </Typography>
+          </>
+        ) : (
+          ""
+        )}
+        {posts.postType === "Lodging" ? (
+          <>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              {posts.lodgingType}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.primary"
+              gutterBottom
+            >
+              From: {posts.fromDate}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.primary"
+              gutterBottom
+            >
+              To: {posts.toDate}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              ${posts.price}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              {posts.description}
+            </Typography>
+          </>
+        ) : (
+          ""
+        )}
+        {posts.postType === "Itinerary" ? (
+          <>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              {posts.activity}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.primary"
+              gutterBottom
+            >
+              From: {posts.fromDate}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.primary"
+              gutterBottom
+            >
+              To: {posts.toDate}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              ${posts.price}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              {posts.description}
+            </Typography>
+          </>
+        ) : (
+          ""
+        )}
+      </CardContent>
+      <CardActions>
+        <Button size="small">Comment</Button>
+      </CardActions>
+    </Card>
+  );
 };
 
 export default PostItem;

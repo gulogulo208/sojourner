@@ -22,7 +22,7 @@ import CardMedia from "@mui/material/CardMedia";
 import { CardActionArea, CircularProgress } from "@mui/material";
 import LandscapeRoundedIcon from "@mui/icons-material/LandscapeRounded";
 import Tooltip from "@mui/material/Tooltip";
-import { GET_TRIPS } from "../utils/queries";
+import { GET_POSTS, GET_TRIPS } from "../utils/queries";
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import HikingRoundedIcon from "@mui/icons-material/HikingRounded";
 import { Link } from "react-router-dom";
@@ -49,6 +49,7 @@ import {
   UPDATE_USER_TRIPS,
   UPDATE_CURRENT_TRIP_ID,
   ADD_USER_TRIP,
+  UPDATE_TRIP_POSTS,
 } from "../utils/actions";
 import TripItem from "./TripItem";
 import Auth from "../utils/auth";

@@ -37,6 +37,7 @@ const Timeline = ({ tripId }) => {
     GET_POSTS,
     {
       variables: { tripId: currentTripId },
+      fetchPolicy: "cache-and-network",
     }
   );
 
@@ -102,7 +103,7 @@ const Timeline = ({ tripId }) => {
     if (!postsData) return;
     if (!usersData) return;
     setTrip(tripData.getTrip);
-    console.log("TIMELINE RERENDER");
+    // console.log("TIMELINE RERENDER");
     setPosts(tripPosts);
     dispatch({
       type: "UPDATE_TRIP_POSTS",

@@ -4,3 +4,4 @@ export const ADD_USER_TRIP = "ADD_USER_TRIP";
 export const SHOW_TIMELINE = "SHOW_TIMELINE";
 export const UPDATE_CURRENT_TRIP_ID = "UPDATE_CURRENT_TRIP_ID";
 export const REFRESH_POSTS = "REFRESH_POSTS";
+export const REMOVE_TRIP = "REMOVE_TRIP";

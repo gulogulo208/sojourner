@@ -320,12 +320,13 @@ export default function MainContainer() {
                 marginTop: "1.5rem",
               }}
             >
-              {loadingCreateTrip 
-              ? <CircularProgress sx={{ml: '5px'}}/> 
-              : <Button sx={{ textAlign: "center" }} onClick={handleAddTrip}>
-                Add Trip{" "}
-              </Button>
-              }
+              {loadingCreateTrip ? (
+                <CircularProgress sx={{ ml: "5px" }} />
+              ) : (
+                <Button sx={{ textAlign: "center" }} onClick={handleAddTrip}>
+                  Add Trip{" "}
+                </Button>
+              )}
             </Box>
           </Box>
         </Fade>
@@ -448,7 +449,6 @@ export default function MainContainer() {
           id="postContainer"
         >
           {showTimeline && <Timeline tripId={tripId} />}
-
         </Container>
         <Box
           component="footer"
@@ -467,13 +467,14 @@ export default function MainContainer() {
           }}
         >
           {/* <Copyright /> */}
-          <Typography variant="body1" sx={{class: "footerTypography"}}>
+          <Typography variant="body1" sx={{ class: "footerTypography" }}>
             <MUILink
               color="inherit"
               href="https://github.com/gulogulo208/sojourner"
             ></MUILink>
             <Typography
-              variant="body2" component="span"
+              variant="body2"
+              component="span"
               // color="text.secondary"
               style={{ display: "block" }}
             >

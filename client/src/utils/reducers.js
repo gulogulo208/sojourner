@@ -7,6 +7,7 @@ import {
   UPDATE_CURRENT_TRIP_ID,
   REFRESH_POSTS,
 } from "./actions";
+import { REMOVE_TRIP } from "./mutation";
 
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -26,6 +27,8 @@ export const reducer = (state, action) => {
       return { ...state, currentTripId: action.currentTripId };
     case REFRESH_POSTS:
       return { ...state, refreshPosts: action.refreshPosts };
+    case REMOVE_TRIP:
+      return { ...state, showTimeline: action.showTimeline };
     default:
       return state;
   }

@@ -244,6 +244,17 @@ const resolvers = {
     removeTrip: async (parent, { tripId }, context) => {
       if (context.user) {
         try {
+          const removePostsFromTrip = await Post.deleteMany(
+            { tripId: tripId },
+            { new: true }
+          );
+
+          const removeTripFromUsers = await User.updateMany(
+            { trips: tripId },
+            { $pull: { trips: tripId } },
+            { new: true }
+          );
+
           const removedTrip = await Trip.findByIdAndDelete(tripId, {
             new: true,
           });

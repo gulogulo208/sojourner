@@ -27,7 +27,7 @@ import Auth from "../utils/auth";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
 import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
-import Grid from '@mui/material/Grid';
+import Grid from "@mui/material/Grid";
 
 const Timeline = ({ tripId }) => {
   const [state, dispatch] = useTripContext();
@@ -89,13 +89,14 @@ const Timeline = ({ tripId }) => {
       });
       await removeTrip({
         variables: {
-          tripId,
+          tripId: tripId,
         },
       });
       dispatch({
         type: REMOVE_TRIP,
         showTimeline: true,
       });
+      window.location.reload();
       if (error) {
         console.error(error);
       }
@@ -179,7 +180,9 @@ const Timeline = ({ tripId }) => {
               sx={{ display: "flex", justifyContent: "space-between" }}
             >
               {trip.tripName}
-              <EventBusyIcon onClick={handleRemoveTrip}></EventBusyIcon>
+              <EventBusyIcon
+                onClick={() => handleRemoveTrip(currentTripId)}
+              ></EventBusyIcon>
             </Typography>
             {/* <h1>{trip.tripName}</h1> */}
             <Button
@@ -247,7 +250,8 @@ const Timeline = ({ tripId }) => {
               </Box>
             </Modal>
             <CreatePost tripId={currentTripId} />
-            <List id="postList"
+            <List
+              id="postList"
               sx={{
                 // display: "grid",
                 // flexDirection: "column",
@@ -260,13 +264,13 @@ const Timeline = ({ tripId }) => {
                 maxHeight: 450,
                 "& ul": { padding: 0 },
                 marginTop: 2,
-                padding: 2
+                padding: 2,
               }}
             >
               <Grid container spacing={2}>
-              {tripPosts.map((post, i) => {
-                return <PostItem key={i} posts={post} />;
-              })}
+                {tripPosts.map((post, i) => {
+                  return <PostItem key={i} posts={post} />;
+                })}
               </Grid>
             </List>
           </>

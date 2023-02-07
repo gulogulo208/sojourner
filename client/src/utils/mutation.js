@@ -98,7 +98,7 @@ export const CREATE_POST = gql`
 `;
 
 export const REMOVE_TRIP = gql`
-  mutation Mutation($tripId: ID!) {
+  mutation removeTrip($tripId: String!) {
     removeTrip(tripId: $tripId) {
       _id
     }

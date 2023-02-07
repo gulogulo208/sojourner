@@ -210,6 +210,24 @@ const resolvers = {
       );
     },
 
+    removeTrip: async (parent, {tripId}, context) => {
+      if (context.user){
+        try {
+          const removedTrip = await Trip.findByIdAndDelete(
+            tripId,
+            {new: true}
+          );
+
+          return removedTrip;
+        } catch(error){
+          console.error(error)
+        }
+      }
+      throw new AuthenticationError(
+        "You must be logged in to remove a trip"
+      );
+    },
+
     createPost: async (parent, args, context) => {
       if (context.user) {
         const post = await Post.create({

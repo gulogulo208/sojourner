@@ -180,9 +180,13 @@ const Timeline = ({ tripId }) => {
               sx={{ display: "flex", justifyContent: "space-between" }}
             >
               {trip.tripName}
-              <EventBusyIcon
-                onClick={() => handleRemoveTrip(currentTripId)}
-              ></EventBusyIcon>
+              {trip.createdBy._id === Auth.getProfile().data._id ? (
+                <EventBusyIcon
+                  onClick={() => handleRemoveTrip(currentTripId)}
+                ></EventBusyIcon>
+              ) : (
+                ""
+              )}
             </Typography>
             {/* <h1>{trip.tripName}</h1> */}
             <Button

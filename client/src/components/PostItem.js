@@ -1,27 +1,73 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useTripContext } from "../utils/globalState";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { useMutation } from "@apollo/client";
+import { REMOVE_POST } from "../utils/mutation";
+import { REFRESH_POSTS } from "../utils/actions";
+import Auth from "../utils/auth";
+import Grid from '@mui/material/Grid';
+// import List from '@mui/material/List';
+// import ListItem from '@mui/material/ListItem';
+// import ListItemText from '@mui/material/ListItemText';
+// import ListSubheader from '@mui/material/ListSubheader';
 
 const PostItem = ({ posts }) => {
   // console.log(tripPosts);
   const [state, dispatch] = useTripContext();
   const { tripPosts, refreshPosts } = state;
 
+
+  const [removePost, { loading, error, data }] = useMutation(REMOVE_POST);
+
+  const handleRemovePost = async () => {
+    try {
+      dispatch({
+        type: REFRESH_POSTS,
+        refreshPosts: false,
+      });
+      await removePost({
+        variables: {
+          postId: posts._id,
+          userId: Auth.getProfile().data._id
+        },
+      });
+      //   console.log(data);
+      // window.location.reload();
+      dispatch({
+        type: REFRESH_POSTS,
+        refreshPosts: true,
+      });
+      if (error) {
+        console.error(error);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   // console.log("POST ITEM RERENDER");
   return (
+    <Grid item xs={8} md={6}>
+
     <Card
       sx={{
+        display: "flex",
+        justifyContent: "center",
         maxWidth: 500,
         textAlign: "center",
-        marginLeft: 65,
-        marginTop: 5,
+        // marginLeft: 65,
+        // marginTop: 5,
       }}
     >
       <CardContent>
+        <Typography sx={{display: 'flex', flexDirection: "row-reverse"}}>
+        <DeleteForeverIcon onClick={handleRemovePost}></DeleteForeverIcon>
+        </Typography>
         <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
           {posts.firstName} {posts.lastName}
         </Typography>
@@ -129,9 +175,10 @@ const PostItem = ({ posts }) => {
         )}
       </CardContent>
       <CardActions>
-        <Button size="small">Comment</Button>
+        {/* <Button size="small">Comment</Button> */}
       </CardActions>
     </Card>
+    </Grid>
   );
 };
 

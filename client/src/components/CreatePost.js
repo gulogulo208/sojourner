@@ -79,6 +79,10 @@ const CreatePost = () => {
 
   const handlePost = async () => {
     try {
+      dispatch({
+        type: REFRESH_POSTS,
+        refreshPosts: false,
+      });
       await createPost({
         variables: {
           postType: post.postType,

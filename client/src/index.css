@@ -58,6 +58,14 @@ main {
   padding-right: 1rem; */
 }
 
+#postList{
+  background-color: var(--star-command-blue);
+}
+
+#postList::-webkit-scrollbar{
+  display: none;
+}
+
 #postPaper {
   padding: 2rem;
   background-color: var(--star-command-blue);

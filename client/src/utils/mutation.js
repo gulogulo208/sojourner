@@ -32,14 +32,15 @@ export const LOG_IN = gql`
     }
   }
 `;
+
 export const CREATE_TRIP = gql`
-  mutation createTrip($tripName: String!) {
-    createTrip(tripName: $tripName) {
-      tripName
+  mutation Mutation($tripName: String!, $tripDate: String!) {
+    createTrip(tripName: $tripName, tripDate: $tripDate) {
       _id
-      users {
-        _id
-      }
+      createdAt
+      tripDate
+      tripName
+      tripPhoto
     }
   }
 `;
@@ -92,6 +93,24 @@ export const CREATE_POST = gql`
       _id
       dateCreated
       postType
+    }
+  }
+`;
+
+export const REMOVE_TRIP = gql`
+  mutation removeTrip($tripId: String!) {
+    removeTrip(tripId: $tripId) {
+      _id
+    }
+  }
+`;
+
+export const REMOVE_POST = gql`
+  mutation removePost($postId: String!, $userId: String!, $tripId: String!) {
+    removePost(postId: $postId, userId: $userId, tripId: $tripId) {
+      _id
+      firstName
+      description
     }
   }
 `;

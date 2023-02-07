@@ -26,6 +26,10 @@ import MUILink from "@mui/material/Link";
 import { useTripContext } from "../utils/globalState";
 import Auth from "../utils/auth";
 import TripsContainer from "./TripsContainer";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
 // MUI HELPERS
 const drawerWidth = 240;
@@ -143,7 +147,7 @@ export default function MainContainer() {
   }, [showTimeline]);
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", id: "timeline" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar
@@ -233,9 +237,7 @@ export default function MainContainer() {
           component="main"
           id="postContainer"
         >
-          <Box sx={{
-            
-          }}>
+          <Box >
             <Typography variant="h2" color='white' sx={{
               textAlign: 'center'
             }}>
@@ -261,14 +263,16 @@ export default function MainContainer() {
             justifyContent: "space-around",
           }}
         >
-          {/* <Container maxWidth="lg"> */}
-          <Typography variant="body1" classes={"footerTypography"}>
+          {/* <Copyright /> */}
+          <Typography variant="body1" sx={{ class: "footerTypography" }}>
             <MUILink
               color="inherit"
               href="https://github.com/gulogulo208/sojourner"
             ></MUILink>
             <Typography
               variant="body2"
+              component="span"
+              // color="text.secondary"
               style={{ display: "block" }}
             >
               {"Copyright © "}
@@ -284,8 +288,8 @@ export default function MainContainer() {
           </Typography>
           <Typography
             variant="body2"
-            classes={"footerTypography"}
-            style={{ display: "block" }}
+            // color="text.secondary"
+            style={{ display: "block", class: "footerTypography" }}
           >
             <GitHubIcon sx={{ mr: 1 }} />
             Created by: Jackson Farren, Theodore Elgee, Naveed Mahmoudian &

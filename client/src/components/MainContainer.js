@@ -7,7 +7,6 @@ import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -16,42 +15,17 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import { CardActionArea, CircularProgress } from "@mui/material";
-import LandscapeRoundedIcon from "@mui/icons-material/LandscapeRounded";
-import Tooltip from "@mui/material/Tooltip";
-import { GET_TRIPS } from "../utils/queries";
-import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import HikingRoundedIcon from "@mui/icons-material/HikingRounded";
 import { Link } from "react-router-dom";
 import Timeline from "./Timeline";
-import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
-import Modal from "@mui/material/Modal";
-import tripModal from "./addTripModal";
-import Backdrop from "@mui/material/Backdrop";
-import Fade from "@mui/material/Fade";
-import InputLabel from "@mui/material/InputLabel";
-import TextField from "@mui/material/TextField";
-import LuggageIcon from "@mui/icons-material/Luggage";
 import Button from "@mui/material/Button";
-import { textAlign } from "@mui/system";
-import { CREATE_TRIP } from "../utils/mutation";
-import CreatePost from "./CreatePost";
 import Container from "@mui/material/Container";
 // import StickyFooter from "./Footer";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import MUILink from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
 import { useTripContext } from "../utils/globalState";
-import {
-  UPDATE_USER_TRIPS,
-  UPDATE_CURRENT_TRIP_ID,
-  ADD_USER_TRIP,
-} from "../utils/actions";
-import TripItem from "./TripItem";
 import Auth from "../utils/auth";
+import TripsContainer from "./TripsContainer";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -150,43 +124,9 @@ export default function MainContainer() {
   const [state, dispatch] = useTripContext();
   const { userTrips, showTimeline } = state;
   const [open, setOpen] = React.useState(false);
-  const [openTripModal, setOpenTripModal] = React.useState(false);
-  const [tripName, setTripName] = React.useState("");
-  const [tripDate, setTripDate] = React.useState("");
-  const [tripId, setTripId] = React.useState("");
   const [renderTimeline, setRenderTimeline] = React.useState(false);
-  const [showTrips, setShowTrips] = React.useState(null);
-
-  // QUERIES & MUTATIONS
-  const [
-    createTrip,
-    {
-      loading: loadingCreateTrip,
-      data: createTripData,
-      error: createTripError,
-    },
-  ] = useMutation(CREATE_TRIP);
-  // const [
-  //   getTrips,
-  //   { loading: tripsLoading, error: tripsError, data: tripsData },
-  // ] = useLazyQuery(GET_TRIPS);
-
-  const {
-    loading: loadingTrips,
-    error: tripsError,
-    data: tripsData,
-  } = useQuery(GET_TRIPS);
 
   // HELPER FUNCTIONS
-  const handleAddTrip = async () => {
-    await createTrip({
-      variables: {
-        tripName: tripName,
-        tripDate: tripDate,
-      },
-    });
-    handleCloseTripModal();
-  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -196,141 +136,18 @@ export default function MainContainer() {
     setOpen(false);
   };
 
-  // const handleTripClick = (tripId) => {
-  //   setTripId(tripId);
-  //   setShowTimeline(true);
-  // };
-
-  const handleOpenTripModal = () => setOpenTripModal(true);
-  const handleCloseTripModal = () => setOpenTripModal(false);
-
   const handleLogout = () => {
     Auth.logout();
   };
 
   // USE EFFECT
-  React.useEffect(() => {
-    if (loadingTrips) {
-      return;
-    } else if (tripsError) {
-      return;
-    } else if (!tripsData) {
-      return;
-    } else if (tripsData) {
-      dispatch({
-        type: UPDATE_USER_TRIPS,
-        userTrips: tripsData.getTrips,
-      });
-      return setShowTrips(<TripItem open={open} />);
-    }
-  }, [dispatch, loadingTrips, tripsError, tripsData, open]);
 
   React.useEffect(() => {
     setRenderTimeline(true);
   }, [showTimeline]);
 
-  React.useEffect(() => {
-    if (loadingCreateTrip) {
-      return;
-    } else if (createTripError) {
-      return;
-    } else if (!createTripData) {
-      return;
-    } else if (createTripData) {
-      dispatch({
-        type: ADD_USER_TRIP,
-        userTrip: createTripData.createTrip,
-      });
-      return setShowTrips(
-        <TripItem
-          // tripList={[...tripsData.getTrips, createTripData.createTrip]}
-          open={open}
-        />
-      );
-    }
-  }, [dispatch, loadingCreateTrip, createTripError, createTripData, open]);
-
-  // React.useEffect(() => {
-  //   getTrips();
-  // }, [getTrips]);
-
-  // IF LOADING
-  // if (tripsLoading) {
-  //   return "Still loading...";
-  // }
-
-  // if (!tripsData) {
-  //   return "No trips data...";
-  // }
-
-  // const tripList = tripsData.getTrips || [];
-
-  if (loadingTrips) {
-    return <CircularProgress />;
-  }
-
   return (
     <Box sx={{ display: "flex", id: "timeline" }}>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        onClose={handleCloseTripModal}
-        open={openTripModal}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={openTripModal}>
-          <Box sx={tripModalStyle}>
-            <Typography sx={{ textAlign: "center", marginBottom: "1rem" }}>
-              Your Next Destination
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                alignItems: "flex-end",
-              }}
-            >
-              <TextField
-                id="input-with-sx"
-                label="City, Country or City, State"
-                variant="standard"
-                fullWidth
-                value={tripName}
-                onChange={(e) => setTripName(e.target.value)}
-              />
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DesktopDatePicker
-                  label="Pick Your Date"
-                  inputFormat="MM/DD/YYYY"
-                  value={tripDate ? dayjs(tripDate) : null}
-                  onChange={(date) => setTripDate(date.format("MM/DD/YYYY"))}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </LocalizationProvider>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "1.5rem",
-              }}
-            >
-              {loadingCreateTrip ? (
-                <CircularProgress sx={{ ml: "5px" }} />
-              ) : (
-                <Button sx={{ textAlign: "center" }} onClick={handleAddTrip}>
-                  Add Trip{" "}
-                </Button>
-              )}
-            </Box>
-          </Box>
-        </Fade>
-      </Modal>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar
@@ -372,34 +189,7 @@ export default function MainContainer() {
             )}
           </IconButton>
         </DrawerHeader>
-        <Divider />
-        {showTrips}
-        <Divider />
         <List>
-          <ListItem disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              onClick={handleOpenTripModal}
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <AddLocationAltIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={"Add A Trip"}
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </ListItemButton>
-          </ListItem>
           <Link to={{ pathname: "/profile" }}>
             <ListItem disablePadding sx={{ display: "block" }}>
               <ListItemButton
@@ -445,10 +235,17 @@ export default function MainContainer() {
         {/* <DrawerHeader /> */}
         <Container
           component="main"
-          // sx={{ mt: 8, mb: 2, mr: 0, ml: 0, width: "100%" }}
           id="postContainer"
         >
-          {showTimeline && <Timeline tripId={tripId} />}
+          <Box >
+            <Typography variant="h2" color='white' sx={{
+              textAlign: 'center'
+            }}>
+              Your Trips 
+            </Typography>
+          </Box>
+          <TripsContainer />
+          {showTimeline && <Timeline />}
         </Container>
         <Box
           component="footer"

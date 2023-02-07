@@ -45,7 +45,9 @@ const Timeline = ({ tripId }) => {
     GET_POSTS,
     {
       variables: { tripId: currentTripId },
+
       fetchPolicy: "cache-and-network",
+
     }
   );
 
@@ -59,11 +61,11 @@ const Timeline = ({ tripId }) => {
   );
 
   const [trip, setTrip] = useState({});
-  const [posts, setPosts] = useState([]);
   const [showPosts, setShowPosts] = useState(false);
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [friendEmail, setFriendEmail] = useState("");
   const [friends, setFriends] = useState([]);
+  const [renderPost, setRenderPost] = useState(null);
 
   const handleOpenAddUserModal = () => setShowAddUserModal(true);
   const handleCloseAddUserModal = () => setShowAddUserModal(false);
@@ -147,9 +149,6 @@ const Timeline = ({ tripId }) => {
     setShowPosts(true);
   }, [
     currentTripId,
-    getPosts,
-    getTrip,
-    getUsersOfTrip,
     postsData,
     tripData,
     usersData,
@@ -167,9 +166,6 @@ const Timeline = ({ tripId }) => {
       </>
     );
   }
-
-  // console.log(trip);
-  // console.log(posts);
   return (
     <>
       <Paper elevation={3} id="postPaper">

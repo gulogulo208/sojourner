@@ -210,6 +210,32 @@ const resolvers = {
       );
     },
 
+    removePost: async(parent, {postId, userId}, context) => {
+      if (context.user){
+        try {
+          const removedPostFromUser = await User.findByIdAndUpdate(
+            userId, 
+            {$pull: { posts: postId}},
+            { new: true }
+          )
+
+          console.log(removedPostFromUser)
+
+          const removedPost = await Post.findByIdAndDelete(
+            postId,
+            {new: true}
+          )
+          return removedPost
+
+        } catch(error){
+          console.error(error)
+        }
+      }
+      throw new AuthenticationError(
+        "You must be logged in to remove a post"
+      );
+    },
+
     removeTrip: async (parent, {tripId}, context) => {
       if (context.user){
         try {

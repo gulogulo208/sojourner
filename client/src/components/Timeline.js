@@ -15,11 +15,19 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { ADD_USER_TO_TRIP, REMOVE_USER_FROM_TRIP } from "../utils/mutation";
+import {
+  ADD_USER_TO_TRIP,
+  REMOVE_TRIP,
+  REMOVE_USER_FROM_TRIP,
+} from "../utils/mutation";
 import { useTripContext } from "../utils/globalState";
 import { List, ListItem } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import Auth from "../utils/auth";
+import EventBusyIcon from "@mui/icons-material/EventBusy";
+import ListItemText from "@mui/material/ListItemText";
+import ListSubheader from "@mui/material/ListSubheader";
+import Grid from "@mui/material/Grid";
 
 const Timeline = ({ tripId }) => {
   const [state, dispatch] = useTripContext();
@@ -69,6 +77,32 @@ const Timeline = ({ tripId }) => {
     });
 
     window.location.reload();
+  };
+
+  const [removeTrip, { loading, error, data }] = useMutation(REMOVE_TRIP);
+
+  const handleRemoveTrip = async (tripId) => {
+    try {
+      dispatch({
+        type: REMOVE_TRIP,
+        showTimeline: false,
+      });
+      await removeTrip({
+        variables: {
+          tripId: tripId,
+        },
+      });
+      dispatch({
+        type: REMOVE_TRIP,
+        showTimeline: true,
+      });
+      window.location.reload();
+      if (error) {
+        console.error(error);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleRemoveFriend = async (userId) => {
@@ -141,7 +175,20 @@ const Timeline = ({ tripId }) => {
       <Paper elevation={3} id="postPaper">
         {showPosts ? (
           <>
-            <h1>{trip.tripName}</h1>
+            <Typography
+              variant="h3"
+              sx={{ display: "flex", justifyContent: "space-between" }}
+            >
+              {trip.tripName}
+              {trip.createdBy._id === Auth.getProfile().data._id ? (
+                <EventBusyIcon
+                  onClick={() => handleRemoveTrip(currentTripId)}
+                ></EventBusyIcon>
+              ) : (
+                ""
+              )}
+            </Typography>
+            {/* <h1>{trip.tripName}</h1> */}
             <Button
               size="small"
               sx={{
@@ -207,9 +254,29 @@ const Timeline = ({ tripId }) => {
               </Box>
             </Modal>
             <CreatePost tripId={currentTripId} />
-            {tripPosts.map((post, i) => {
-              return <PostItem key={i} posts={post} />;
-            })}
+            <List
+              id="postList"
+              sx={{
+                // display: "grid",
+                // flexDirection: "column",
+                // justifyContent: "space-around",
+                width: "100%",
+                // maxWidth: 360,
+                bgcolor: "background.paper",
+                position: "relative",
+                overflow: "auto",
+                maxHeight: 450,
+                "& ul": { padding: 0 },
+                marginTop: 2,
+                padding: 2,
+              }}
+            >
+              <Grid container spacing={2}>
+                {tripPosts.map((post, i) => {
+                  return <PostItem key={i} posts={post} />;
+                })}
+              </Grid>
+            </List>
           </>
         ) : (
           ""

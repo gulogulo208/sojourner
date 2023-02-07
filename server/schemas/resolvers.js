@@ -2,10 +2,9 @@ const { AuthenticationError, ApolloError } = require("apollo-server-express");
 const { User, Trip, Post } = require("../models");
 const { signToken } = require("../utils/auth");
 const { createTripPhoto } = require("../utils/createTripPhoto");
-const error = ApolloError
+const error = ApolloError;
 
 const resolvers = {
-
   Query: {
     getTrips: async (parent, args, context) => {
       if (context.user) {
@@ -43,17 +42,19 @@ const resolvers = {
 
     getUpcomingTrips: async (parent, { tripDate }, context) => {
       const currentDate = new Date();
-      const formattedDate = currentDate.toLocaleDateString('en-US', {
-        month: "2-digit", 
-        day: "2-digit", 
-        year: "numeric"
-      })
-      if (context.user){
+      const formattedDate = currentDate.toLocaleDateString("en-US", {
+        month: "2-digit",
+        day: "2-digit",
+        year: "numeric",
+      });
+      if (context.user) {
         try {
-          const upcomingTrips = await Trip.find({tripDate: {$gte: formattedDate }}).populate("posts");
-          return upcomingTrips
+          const upcomingTrips = await Trip.find({
+            tripDate: { $gte: formattedDate },
+          }).populate("posts");
+          return upcomingTrips;
         } catch (error) {
-          console.error(JSON.stringify(error, null, 2))
+          console.error(JSON.stringify(error, null, 2));
         }
       }
     },
@@ -61,7 +62,9 @@ const resolvers = {
     getPosts: async (parent, { tripId }, context) => {
       if (context.user) {
         try {
-          const tripPosts = await Post.find({ tripId: tripId });
+          const tripPosts = await Post.find({ tripId: tripId }).populate(
+            "createdBy"
+          );
 
           return tripPosts.reverse();
         } catch (error) {
@@ -132,30 +135,32 @@ const resolvers = {
     createTrip: async (parent, { tripName, tripDate }, context) => {
       if (context.user) {
         try {
-        const tripPhoto = await createTripPhoto(tripName);
+          const tripPhoto = await createTripPhoto(tripName);
 
-        const trip = await Trip.create({
-          createdBy: context.user._id,
-          tripName,
-          tripDate,
-          tripPhoto,
-        });
+          const trip = await Trip.create({
+            createdBy: context.user._id,
+            tripName,
+            tripDate,
+            tripPhoto,
+          });
 
-        await Trip.findOneAndUpdate(trip._id, {
-          $addToSet: { users: context.user._id },
-        });
+          await Trip.findOneAndUpdate(trip._id, {
+            $addToSet: { users: context.user._id },
+          });
 
-        await User.findByIdAndUpdate(context.user._id, {
-          $addToSet: { trips: trip._id },
-        }, 
-        { new: true}
-        );
+          await User.findByIdAndUpdate(
+            context.user._id,
+            {
+              $addToSet: { trips: trip._id },
+            },
+            { new: true }
+          );
 
-        return trip;
-      } catch (error){
-        console.error(JSON.stringify(error, null, 2))
+          return trip;
+        } catch (error) {
+          console.error(JSON.stringify(error, null, 2));
+        }
       }
-    }
 
       throw new AuthenticationError("You must be logged in to create a trip");
     },
@@ -210,53 +215,64 @@ const resolvers = {
       );
     },
 
-    removePost: async(parent, {postId, userId}, context) => {
-      if (context.user){
+    removePost: async (parent, { postId, userId, tripId }, context) => {
+      if (context.user) {
         try {
           const removedPostFromUser = await User.findByIdAndUpdate(
-            userId, 
-            {$pull: { posts: postId}},
+            userId,
+            { $pull: { posts: postId } },
             { new: true }
-          )
-
-          console.log(removedPostFromUser)
-
-          const removedPost = await Post.findByIdAndDelete(
-            postId,
-            {new: true}
-          )
-          return removedPost
-
-        } catch(error){
-          console.error(error)
-        }
-      }
-      throw new AuthenticationError(
-        "You must be logged in to remove a post"
-      );
-    },
-
-    removeTrip: async (parent, {tripId}, context) => {
-      if (context.user){
-        try {
-          const removedTrip = await Trip.findByIdAndDelete(
-            tripId,
-            {new: true}
           );
 
-          return removedTrip;
-        } catch(error){
-          console.error(error)
+          const removePostFromTrip = await Trip.findByIdAndUpdate(
+            tripId,
+            {
+              $pull: { posts: postId },
+            },
+            { new: true }
+          );
+
+          const removedPost = await Post.findByIdAndDelete(postId, {
+            new: true,
+          });
+          return removedPost;
+        } catch (error) {
+          console.error(error);
         }
       }
-      throw new AuthenticationError(
-        "You must be logged in to remove a trip"
-      );
+      throw new AuthenticationError("You must be logged in to remove a post");
+    },
+
+    removeTrip: async (parent, { tripId }, context) => {
+      if (context.user) {
+        try {
+          const removePostsFromTrip = await Post.deleteMany(
+            { tripId: tripId },
+            { new: true }
+          );
+
+          const removeTripFromUsers = await User.updateMany(
+            { trips: tripId },
+            { $pull: { trips: tripId } },
+            { new: true }
+          );
+
+          const removedTrip = await Trip.findByIdAndDelete(tripId, {
+            new: true,
+          });
+
+          return removedTrip;
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      throw new AuthenticationError("You must be logged in to remove a trip");
     },
 
     createPost: async (parent, args, context) => {
       if (context.user) {
         const post = await Post.create({
+          createdBy: context.user._id,
           postType: args.postType,
           firstName: args.firstName,
           lastName: args.lastName,

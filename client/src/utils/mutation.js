@@ -34,16 +34,15 @@ export const LOG_IN = gql`
 `;
 
 export const CREATE_TRIP = gql`
-mutation Mutation($tripName: String!, $tripDate: String!) {
-  createTrip(tripName: $tripName, tripDate: $tripDate) {
-    _id
-    createdAt
-    tripDate
-    tripName
-    tripPhoto
+  mutation Mutation($tripName: String!, $tripDate: String!) {
+    createTrip(tripName: $tripName, tripDate: $tripDate) {
+      _id
+      createdAt
+      tripDate
+      tripName
+      tripPhoto
+    }
   }
-}
-
 `;
 
 export const ADD_USER_TO_TRIP = gql`
@@ -99,19 +98,19 @@ export const CREATE_POST = gql`
 `;
 
 export const REMOVE_TRIP = gql`
-mutation Mutation($tripId: ID!) {
-  removeTrip(tripId: $tripId) {
-    _id
+  mutation removeTrip($tripId: String!) {
+    removeTrip(tripId: $tripId) {
+      _id
+    }
   }
-}
 `;
 
 export const REMOVE_POST = gql`
-mutation Mutation($postId: String!, $userId: String!) {
-  removePost(postId: $postId, userId: $userId) {
-    _id
-    firstName
-    description
+  mutation removePost($postId: String!, $userId: String!, $tripId: String!) {
+    removePost(postId: $postId, userId: $userId, tripId: $tripId) {
+      _id
+      firstName
+      description
+    }
   }
-}
-`
+`;

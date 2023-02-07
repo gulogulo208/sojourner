@@ -14,6 +14,7 @@ const typeDefs = gql`
   type Trip {
     _id: ID!
     createdAt: String!
+    createdBy: User!
     tripName: String!
     tripDate: String!
     tripPhoto: String
@@ -24,6 +25,8 @@ const typeDefs = gql`
   type Post {
     _id: ID!
     dateCreated: String!
+    firstName: String!
+    lastName: String!
     postType: String!
     tripId: String!
     fromDate: String
@@ -46,6 +49,7 @@ const typeDefs = gql`
     getUpcomingTrips(tripDate: String!): [Trip]
     getPosts(tripId: ID!): [Post]
     getUser: User
+    getUsersOfTrip(tripId: ID!): [User]
   }
 
   type Mutation {
@@ -58,10 +62,12 @@ const typeDefs = gql`
     login(email: String!, password: String!): Auth
 
     createTrip(tripName: String!, tripDate: String!): Trip
-    addUserToTrip(tripId: String!, userId: String!): Trip
+    addUserToTrip(tripId: String!, email: String!): Trip
 
     createPost(
       postType: String!
+      firstName: String!
+      lastName: String!
       tripId: String!
       fromDate: String
       toDate: String
@@ -71,6 +77,8 @@ const typeDefs = gql`
       activity: String
       description: String
     ): Post
+
+    removeUserFromTrip(tripId: String!, userId: String!): Trip
   }
 `;
 

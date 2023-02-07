@@ -7,6 +7,14 @@ const postSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  firstName: {
+    type: String,
+    required: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
   postType: {
     type: String,
     enum: ["Transportation", "Lodging", "Itinerary"],

@@ -60,6 +60,7 @@ const TripsContainer = () => {
             },
         });
         handleCloseTripModal();
+        window.location.reload();
     };
 
     const handleOpenTripModal = () => setOpenTripModal(true);

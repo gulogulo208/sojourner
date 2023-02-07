@@ -13,15 +13,12 @@ import dayjs from "dayjs";
 import TextField from "@mui/material/TextField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_POST } from "../utils/mutation";
 import { useTripContext } from "../utils/globalState";
-import { GET_POSTS, GET_USER } from "../utils/queries";
 import Auth from "../utils/auth";
 import { REFRESH_POSTS, UPDATE_TRIP_POSTS } from "../utils/actions";
 
@@ -97,8 +94,6 @@ const CreatePost = () => {
           description: post.description,
         },
       });
-      //   console.log(data);
-      // window.location.reload();
       dispatch({
         type: REFRESH_POSTS,
         refreshPosts: true,

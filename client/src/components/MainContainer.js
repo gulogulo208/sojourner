@@ -7,7 +7,6 @@ import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -16,42 +15,15 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import { CardActionArea, CircularProgress } from "@mui/material";
-import LandscapeRoundedIcon from "@mui/icons-material/LandscapeRounded";
-import Tooltip from "@mui/material/Tooltip";
-import { GET_POSTS, GET_TRIPS } from "../utils/queries";
-import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import HikingRoundedIcon from "@mui/icons-material/HikingRounded";
 import { Link } from "react-router-dom";
 import Timeline from "./Timeline";
-import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
-import Modal from "@mui/material/Modal";
-import tripModal from "./addTripModal";
-import Backdrop from "@mui/material/Backdrop";
-import Fade from "@mui/material/Fade";
-import InputLabel from "@mui/material/InputLabel";
-import TextField from "@mui/material/TextField";
-import LuggageIcon from "@mui/icons-material/Luggage";
 import Button from "@mui/material/Button";
-import { textAlign } from "@mui/system";
-import { CREATE_TRIP } from "../utils/mutation";
-import CreatePost from "./CreatePost";
 import Container from "@mui/material/Container";
 // import StickyFooter from "./Footer";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import MUILink from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
 import { useTripContext } from "../utils/globalState";
-import {
-  UPDATE_USER_TRIPS,
-  UPDATE_CURRENT_TRIP_ID,
-  ADD_USER_TRIP,
-  UPDATE_TRIP_POSTS,
-} from "../utils/actions";
-import TripItem from "./TripItem";
 import Auth from "../utils/auth";
 import TripsContainer from "./TripsContainer";
 
@@ -259,7 +231,6 @@ export default function MainContainer() {
         {/* <DrawerHeader /> */}
         <Container
           component="main"
-          // sx={{ mt: 8, mb: 2, mr: 0, ml: 0, width: "100%" }}
           id="postContainer"
         >
           <Box sx={{
@@ -298,7 +269,6 @@ export default function MainContainer() {
             ></MUILink>
             <Typography
               variant="body2"
-              // color="text.secondary"
               style={{ display: "block" }}
             >
               {"Copyright © "}
@@ -315,7 +285,6 @@ export default function MainContainer() {
           <Typography
             variant="body2"
             classes={"footerTypography"}
-            // color="text.secondary"
             style={{ display: "block" }}
           >
             <GitHubIcon sx={{ mr: 1 }} />

@@ -18,8 +18,6 @@ import {
     ADD_USER_TRIP,
 } from "../utils/actions";
 import TripItem from "./TripItem";
-import Auth from "../utils/auth";
-
 
 const TripsContainer = () => {
     const [state, dispatch] = useTripContext();

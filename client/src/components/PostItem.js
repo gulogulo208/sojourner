@@ -7,7 +7,6 @@ import Typography from "@mui/material/Typography";
 import { useTripContext } from "../utils/globalState";
 
 const PostItem = ({ posts }) => {
-  // console.log(tripPosts);
   const [state, dispatch] = useTripContext();
   const { tripPosts, refreshPosts } = state;
 

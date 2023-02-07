@@ -51,7 +51,6 @@ const Timeline = ({ tripId }) => {
   );
 
   const [trip, setTrip] = useState({});
-  const [posts, setPosts] = useState([]);
   const [showPosts, setShowPosts] = useState(false);
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [friendEmail, setFriendEmail] = useState("");
@@ -146,9 +145,6 @@ const Timeline = ({ tripId }) => {
       </>
     );
   }
-
-  // console.log(trip);
-  // console.log(posts);
   return (
     <>
       <Paper elevation={3} id="postPaper">

@@ -106,7 +106,7 @@ export const REMOVE_TRIP = gql`
 `;
 
 export const REMOVE_POST = gql`
-  mutation Mutation($postId: String!, $userId: String!, $tripId: String!) {
+  mutation removePost($postId: String!, $userId: String!, $tripId: String!) {
     removePost(postId: $postId, userId: $userId, tripId: $tripId) {
       _id
       firstName

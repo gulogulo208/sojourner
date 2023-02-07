@@ -44,6 +44,14 @@ import Container from "@mui/material/Container";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import MUILink from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
+import { useTripContext } from "../utils/globalState";
+import {
+  UPDATE_USER_TRIPS,
+  UPDATE_CURRENT_TRIP_ID,
+  ADD_USER_TRIP,
+} from "../utils/actions";
+import TripItem from "./TripItem";
+import Auth from "../utils/auth";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -139,20 +147,36 @@ export default function MainContainer() {
   };
 
   // STATE
+  const [state, dispatch] = useTripContext();
+  const { userTrips, showTimeline } = state;
   const [open, setOpen] = React.useState(false);
   const [openTripModal, setOpenTripModal] = React.useState(false);
   const [tripName, setTripName] = React.useState("");
   const [tripDate, setTripDate] = React.useState("");
   const [tripId, setTripId] = React.useState("");
-  const [showTimeline, setShowTimeline] = React.useState(false);
+  const [renderTimeline, setRenderTimeline] = React.useState(false);
+  const [showTrips, setShowTrips] = React.useState(null);
 
   // QUERIES & MUTATIONS
   const [createTrip, { loading, data, error }] = useMutation(CREATE_TRIP);
-
   const [
-    getTrips,
-    { loading: tripsLoading, error: tripsError, data: tripsData },
-  ] = useLazyQuery(GET_TRIPS);
+    createTrip,
+    {
+      loading: loadingCreateTrip,
+      data: createTripData,
+      error: createTripError,
+    },
+  ] = useMutation(CREATE_TRIP);
+  // const [
+  //   getTrips,
+  //   { loading: tripsLoading, error: tripsError, data: tripsData },
+  // ] = useLazyQuery(GET_TRIPS);
+
+  const {
+    loading: loadingTrips,
+    error: tripsError,
+    data: tripsData,
+  } = useQuery(GET_TRIPS);
 
   // HELPER FUNCTIONS
   const handleAddTrip = async () => {
@@ -162,8 +186,7 @@ export default function MainContainer() {
         tripDate: tripDate,
       },
     });
-
-    window.location.reload();
+    handleCloseTripModal();
   };
 
   const handleDrawerOpen = () => {
@@ -174,29 +197,78 @@ export default function MainContainer() {
     setOpen(false);
   };
 
-  const handleTripClick = (tripId) => {
-    setTripId(tripId);
-    setShowTimeline(true);
-  };
+  // const handleTripClick = (tripId) => {
+  //   setTripId(tripId);
+  //   setShowTimeline(true);
+  // };
 
   const handleOpenTripModal = () => setOpenTripModal(true);
   const handleCloseTripModal = () => setOpenTripModal(false);
 
+  const handleLogout = () => {
+    Auth.logout();
+  };
+
   // USE EFFECT
   React.useEffect(() => {
-    getTrips();
-  }, [getTrips]);
+    if (loadingTrips) {
+      return;
+    } else if (tripsError) {
+      return;
+    } else if (!tripsData) {
+      return;
+    } else if (tripsData) {
+      dispatch({
+        type: UPDATE_USER_TRIPS,
+        userTrips: tripsData.getTrips,
+      });
+      return setShowTrips(<TripItem open={open} />);
+    }
+  }, [dispatch, loadingTrips, tripsError, tripsData, open]);
+
+  React.useEffect(() => {
+    setRenderTimeline(true);
+  }, [showTimeline]);
+
+  React.useEffect(() => {
+    if (loadingCreateTrip) {
+      return;
+    } else if (createTripError) {
+      return;
+    } else if (!createTripData) {
+      return;
+    } else if (createTripData) {
+      dispatch({
+        type: ADD_USER_TRIP,
+        userTrip: createTripData.createTrip,
+      });
+      return setShowTrips(
+        <TripItem
+          // tripList={[...tripsData.getTrips, createTripData.createTrip]}
+          open={open}
+        />
+      );
+    }
+  }, [dispatch, loadingCreateTrip, createTripError, createTripData, open]);
+
+  // React.useEffect(() => {
+  //   getTrips();
+  // }, [getTrips]);
 
   // IF LOADING
-  if (tripsLoading) {
-    return "Still loading...";
-  }
+  // if (tripsLoading) {
+  //   return "Still loading...";
+  // }
 
-  if (!tripsData) {
-    return "No trips data...";
-  }
+  // if (!tripsData) {
+  //   return "No trips data...";
+  // }
 
-  const tripList = tripsData.getTrips || [];
+  // const tripList = tripsData.getTrips || [];
+
+  if (loadingTrips) {
+    return <CircularProgress />;
+  }
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -226,8 +298,9 @@ export default function MainContainer() {
             >
               <TextField
                 id="input-with-sx"
-                label="Milan, Italy"
+                label="City, Country or City, State"
                 variant="standard"
+                fullWidth
                 value={tripName}
                 onChange={(e) => setTripName(e.target.value)}
               />
@@ -248,20 +321,26 @@ export default function MainContainer() {
                 marginTop: "1.5rem",
               }}
             >
-              {loading ? (
-                <CircularProgress sx={{ ml: "5px" }} />
-              ) : (
-                <Button sx={{ textAlign: "center" }} onClick={handleAddTrip}>
-                  Add Trip{" "}
-                </Button>
-              )}
+              {loading 
+              ? <CircularProgress sx={{ml: '5px'}}/> 
+              : <Button sx={{ textAlign: "center" }} onClick={handleAddTrip}>
+                Add Trip{" "}
+              </Button>
+              }
             </Box>
           </Box>
         </Fade>
       </Modal>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar id="toolBar">
+        <Toolbar
+          id="toolBar"
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -275,8 +354,11 @@ export default function MainContainer() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Welcome, Sojourner
+            Welcome, {Auth.getProfile().data.firstName}
           </Typography>
+          <Button variant="small" onClick={handleLogout}>
+            Log Out
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer id="drawer" variant="permanent" open={open} sx={{}}>
@@ -291,57 +373,7 @@ export default function MainContainer() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          {tripList.map((trip, index) => (
-            <Tooltip key={trip._id} title={trip.tripName} placement="right">
-              <ListItem
-                onClick={() => handleTripClick(trip._id)}
-                style={{ cursor: "pointer" }}
-                disablePadding
-                sx={{ display: "block" }}
-                id={trip._id}
-              >
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                >
-                  <Card
-                    sx={{ width: "100%", display: open ? "block" : "none" }}
-                  >
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        height="140"
-                        image={trip.tripPhoto}
-                        alt="destination img"
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          {trip.tripName}
-                        </Typography>
-                        {/* <Typography variant="body2" color="text.secondary">
-                        Lizards are a widespread group of squamate reptiles,
-                        with over 6,000 species, ranging across all continents
-                        except Antarctica
-                      </Typography> */}
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                  <LandscapeRoundedIcon
-                    sx={{
-                      minWidth: 0,
-                      justifyContent: "center",
-                      display: open ? "none" : "block",
-                    }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            </Tooltip>
-          ))}
-        </List>
+        {showTrips}
         <Divider />
         <List>
           <ListItem disablePadding sx={{ display: "block" }}>
@@ -417,6 +449,7 @@ export default function MainContainer() {
           id="postContainer"
         >
           {showTimeline && <Timeline tripId={tripId} />}
+
         </Container>
         <Box
           component="footer"
@@ -432,9 +465,42 @@ export default function MainContainer() {
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-around",
+            justifyContent: "space-around",
           }}
         >
           {/* <Container maxWidth="lg"> */}
+          <Typography variant="body1" classes={"footerTypography"}>
+            <MUILink
+              color="inherit"
+              href="https://github.com/gulogulo208/sojourner"
+            ></MUILink>
+            <Typography
+              variant="body2"
+              // color="text.secondary"
+              style={{ display: "block" }}
+            >
+              {"Copyright © "}
+              <MUILink
+                color="inherit"
+                href="https://github.com/gulogulo208/sojourner"
+              >
+                Sojourner
+              </MUILink>{" "}
+              {new Date().getFullYear()}
+              {"."}
+            </Typography>
+          </Typography>
+          <Typography
+            variant="body2"
+            classes={"footerTypography"}
+            // color="text.secondary"
+            style={{ display: "block" }}
+          >
+            <GitHubIcon sx={{ mr: 1 }} />
+            Created by: Jackson Farren, Theodore Elgee, Naveed Mahmoudian &
+            James Porter
+          </Typography>
+          {/* <Copyright /> */}
           <Typography variant="body1" classes={"footerTypography"}>
             <MUILink
               color="inherit"

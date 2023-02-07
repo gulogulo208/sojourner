@@ -18,13 +18,22 @@ import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_POST } from "../utils/mutation";
+import { useTripContext } from "../utils/globalState";
+import { GET_USER } from "../utils/queries";
+import Auth from "../utils/auth";
+import { REFRESH_POSTS } from "../utils/actions";
 
-const CreatePost = ({ tripId }) => {
+const CreatePost = () => {
+  const [state, dispatch] = useTripContext();
+  const { currentTripId } = state;
+
   const [post, setPost] = React.useState({
     postType: "",
-    tripId: tripId,
+    tripId: currentTripId,
+    firstName: "",
+    lastName: "",
     fromDate: "",
     toDate: "",
     price: 0,
@@ -57,8 +66,8 @@ const CreatePost = ({ tripId }) => {
   }, [post.postType]);
 
   React.useEffect(() => {
-    setPost({ ...post, tripId: tripId });
-  }, [tripId]);
+    setPost({ ...post, tripId: currentTripId });
+  }, [currentTripId]);
 
   const handleFromDate = (date) => {
     setPost({
@@ -77,6 +86,8 @@ const CreatePost = ({ tripId }) => {
         variables: {
           postType: post.postType,
           tripId: post.tripId,
+          firstName: Auth.getProfile().data.firstName,
+          lastName: Auth.getProfile().data.lastName,
           transportationType: post.transportationType,
           fromDate: post.fromDate,
           toDate: post.toDate,
@@ -87,7 +98,11 @@ const CreatePost = ({ tripId }) => {
         },
       });
       //   console.log(data);
-      window.location.reload();
+      // window.location.reload();
+      dispatch({
+        type: REFRESH_POSTS,
+        refreshPosts: true,
+      });
       if (error) {
         console.error(error);
       }

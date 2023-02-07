@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import AuthService from "./utils/auth";
 // import Error from './components/Error';
+import { TripProvider } from "./utils/globalState";
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("id_token");
@@ -37,19 +38,21 @@ function App() {
     <>
       <ApolloProvider client={client}>
         <Router>
-          <Routes>
-            {AuthService.loggedIn() ? (
-              <Route path="/" element={<Home />} />
-            ) : (
+          <TripProvider>
+            <Routes>
+              {AuthService.loggedIn() ? (
+                <Route path="/" element={<Home />} />
+              ) : (
+                <Route path="/" element={<Login />} />
+              )}
               <Route path="/" element={<Login />} />
-            )}
-            <Route path="/" element={<Login />} />
-            {AuthService.loggedIn() ? (
-              <Route path="/" element={<Home />} />
-            ) : (
-              <Route path="/signup" element={<Signup />} />
-            )}
-          </Routes>
+              {AuthService.loggedIn() ? (
+                <Route path="/" element={<Home />} />
+              ) : (
+                <Route path="/signup" element={<Signup />} />
+              )}
+            </Routes>
+          </TripProvider>
         </Router>
       </ApolloProvider>
     </>

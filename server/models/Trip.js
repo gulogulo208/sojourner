@@ -7,12 +7,13 @@ const tripSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  tripName: {
-    type: String,
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
-  tripDate: {
-    type: Date,
+  tripName: {
+    type: String,
     required: true,
   },
   tripPhoto: {

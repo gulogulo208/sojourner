@@ -11,6 +11,19 @@ export const GET_TRIPS = gql`
         firstName
         lastName
       }
+      posts {
+        _id
+        dateCreated
+        postType
+        tripId
+        fromDate
+        toDate
+        price
+        transportationType
+        lodgingType
+        activity
+        description
+      }
       tripPhoto
     }
   }
@@ -19,6 +32,11 @@ export const GET_TRIPS = gql`
 export const GET_TRIP = gql`
   query getTrip($tripId: ID!) {
     getTrip(tripId: $tripId) {
+      createdBy {
+        _id
+        firstName
+        lastName
+      }
       tripName
       tripPhoto
       _id
@@ -31,6 +49,8 @@ export const GET_POSTS = gql`
     getPosts(tripId: $tripId) {
       _id
       dateCreated
+      firstName
+      lastName
       postType
       fromDate
       toDate

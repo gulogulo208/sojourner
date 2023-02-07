@@ -11,7 +11,6 @@ const PostItem = ({ posts }) => {
   const [state, dispatch] = useTripContext();
   const { tripPosts, refreshPosts } = state;
 
-  useEffect(() => {
     console.log("POST ITEM RERENDER");
     return (
       <Card
@@ -158,7 +157,6 @@ const PostItem = ({ posts }) => {
         </CardActions>
       </Card>
     );
-  }, [refreshPosts, tripPosts]);
 };
 
 export default PostItem;

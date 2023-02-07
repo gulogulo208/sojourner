@@ -129,8 +129,9 @@ const resolvers = {
       return { token, user };
     },
 
-    createTrip: async (parent, { tripName }, context) => {
+    createTrip: async (parent, { tripName, tripDate }, context) => {
       if (context.user) {
+        try {
         const tripPhoto = await createTripPhoto(tripName);
 
         const trip = await Trip.create({
@@ -151,7 +152,10 @@ const resolvers = {
         );
 
         return trip;
+      } catch (error){
+        console.error(JSON.stringify(error, null, 2))
       }
+    }
 
       throw new AuthenticationError("You must be logged in to create a trip");
     },

@@ -36,11 +36,14 @@ export const LOG_IN = gql`
 export const CREATE_TRIP = gql`
 mutation Mutation($tripName: String!, $tripDate: String!) {
   createTrip(tripName: $tripName, tripDate: $tripDate) {
+    _id
+    createdAt
+    tripDate
     tripName
     tripPhoto
-    tripDate
   }
 }
+
 `;
 
 export const ADD_USER_TO_TRIP = gql`

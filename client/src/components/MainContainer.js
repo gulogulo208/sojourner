@@ -158,7 +158,6 @@ export default function MainContainer() {
   const [showTrips, setShowTrips] = React.useState(null);
 
   // QUERIES & MUTATIONS
-  const [createTrip, { loading, data, error }] = useMutation(CREATE_TRIP);
   const [
     createTrip,
     {
@@ -271,7 +270,7 @@ export default function MainContainer() {
   }
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", id: "timeline" }}>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -321,7 +320,7 @@ export default function MainContainer() {
                 marginTop: "1.5rem",
               }}
             >
-              {loading 
+              {loadingCreateTrip 
               ? <CircularProgress sx={{ml: '5px'}}/> 
               : <Button sx={{ textAlign: "center" }} onClick={handleAddTrip}>
                 Add Trip{" "}
@@ -465,49 +464,16 @@ export default function MainContainer() {
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-around",
-            justifyContent: "space-around",
           }}
         >
-          {/* <Container maxWidth="lg"> */}
-          <Typography variant="body1" classes={"footerTypography"}>
-            <MUILink
-              color="inherit"
-              href="https://github.com/gulogulo208/sojourner"
-            ></MUILink>
-            <Typography
-              variant="body2"
-              // color="text.secondary"
-              style={{ display: "block" }}
-            >
-              {"Copyright © "}
-              <MUILink
-                color="inherit"
-                href="https://github.com/gulogulo208/sojourner"
-              >
-                Sojourner
-              </MUILink>{" "}
-              {new Date().getFullYear()}
-              {"."}
-            </Typography>
-          </Typography>
-          <Typography
-            variant="body2"
-            classes={"footerTypography"}
-            // color="text.secondary"
-            style={{ display: "block" }}
-          >
-            <GitHubIcon sx={{ mr: 1 }} />
-            Created by: Jackson Farren, Theodore Elgee, Naveed Mahmoudian &
-            James Porter
-          </Typography>
           {/* <Copyright /> */}
-          <Typography variant="body1" classes={"footerTypography"}>
+          <Typography variant="body1" sx={{class: "footerTypography"}}>
             <MUILink
               color="inherit"
               href="https://github.com/gulogulo208/sojourner"
             ></MUILink>
             <Typography
-              variant="body2"
+              variant="body2" component="span"
               // color="text.secondary"
               style={{ display: "block" }}
             >
@@ -524,9 +490,8 @@ export default function MainContainer() {
           </Typography>
           <Typography
             variant="body2"
-            classes={"footerTypography"}
             // color="text.secondary"
-            style={{ display: "block" }}
+            style={{ display: "block", class: "footerTypography" }}
           >
             <GitHubIcon sx={{ mr: 1 }} />
             Created by: Jackson Farren, Theodore Elgee, Naveed Mahmoudian &

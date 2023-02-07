@@ -17,7 +17,6 @@ import Grid from "@mui/material/Grid";
 // import ListSubheader from '@mui/material/ListSubheader';
 
 const PostItem = ({ posts }) => {
-  // console.log(tripPosts);
   const [state, dispatch] = useTripContext();
   const { tripPosts, refreshPosts, currentTripId } = state;
 
@@ -64,9 +63,13 @@ const PostItem = ({ posts }) => {
         }}
       >
         <CardContent>
-          <Typography sx={{ display: "flex", flexDirection: "row-reverse" }}>
-            <DeleteForeverIcon onClick={handleRemovePost}></DeleteForeverIcon>
-          </Typography>
+          {posts.createdBy._id === Auth.getProfile().data._id ? (
+            <Typography sx={{ display: "flex", flexDirection: "row-reverse" }}>
+              <DeleteForeverIcon onClick={handleRemovePost}></DeleteForeverIcon>
+            </Typography>
+          ) : (
+            ""
+          )}
           <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
             {posts.firstName} {posts.lastName}
           </Typography>

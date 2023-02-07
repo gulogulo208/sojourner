@@ -25,6 +25,7 @@ const typeDefs = gql`
   type Post {
     _id: ID!
     dateCreated: String!
+    createdBy: User!
     firstName: String!
     lastName: String!
     postType: String!

@@ -62,7 +62,9 @@ const resolvers = {
     getPosts: async (parent, { tripId }, context) => {
       if (context.user) {
         try {
-          const tripPosts = await Post.find({ tripId: tripId });
+          const tripPosts = await Post.find({ tripId: tripId }).populate(
+            "createdBy"
+          );
 
           return tripPosts.reverse();
         } catch (error) {
@@ -270,6 +272,7 @@ const resolvers = {
     createPost: async (parent, args, context) => {
       if (context.user) {
         const post = await Post.create({
+          createdBy: context.user._id,
           postType: args.postType,
           firstName: args.firstName,
           lastName: args.lastName,

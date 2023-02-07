@@ -16,7 +16,7 @@ import {
   UPDATE_USER_TRIPS,
 } from "../utils/actions";
 
-const TripItem = ({ tripList, open }) => {
+const TripItem = ({ }) => {
   const [state, dispatch] = useTripContext();
   const { userTrips } = state;
   const [trips, setTrips] = useState([]);
@@ -38,7 +38,10 @@ const TripItem = ({ tripList, open }) => {
   }, [userTrips]);
 
   return (
-    <List>
+    <List sx={{ 
+      display: "flex",
+      flexDirection: "row"
+    }}>
       {trips.map((trip, index) => (
         <Tooltip key={trip._id} title={trip.tripName} placement="right">
           <ListItem
@@ -51,16 +54,19 @@ const TripItem = ({ tripList, open }) => {
             <ListItemButton
               sx={{
                 minHeight: 48,
-                justifyContent: open ? "initial" : "center",
+                justifyContent: "initial",
                 px: 2.5,
               }}
             >
-              <Card sx={{ width: "100%", display: open ? "block" : "none" }}>
+              <Card sx={{ width: "100%", display: "block" }}>
                 <CardActionArea>
                   <CardMedia
                     component="img"
-                    height="140"
-                    image={trip.tripPhoto}
+                    minwidth='200'
+                    width='200'
+                    minheight='200'
+                    height="200"
+                    src={trip.tripPhoto}
                     alt="destination img"
                   />
                   <CardContent>
@@ -75,13 +81,6 @@ const TripItem = ({ tripList, open }) => {
                   </CardContent>
                 </CardActionArea>
               </Card>
-              <LandscapeRoundedIcon
-                sx={{
-                  minWidth: 0,
-                  justifyContent: "center",
-                  display: open ? "none" : "block",
-                }}
-              />
             </ListItemButton>
           </ListItem>
         </Tooltip>

@@ -37,6 +37,7 @@ const Timeline = ({ tripId }) => {
     GET_POSTS,
     {
       variables: { tripId: currentTripId },
+      fetchPolicy: 'cache-and-network',
     }
   );
 

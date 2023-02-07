@@ -77,8 +77,9 @@ const typeDefs = gql`
       activity: String
       description: String
     ): Post
-
+    
     removeUserFromTrip(tripId: String!, userId: String!): Trip
+    removePost(postId: String!, userId: String!): Post
   }
 `;
 

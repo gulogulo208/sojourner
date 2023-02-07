@@ -210,6 +210,21 @@ const resolvers = {
       );
     },
 
+    removePost: async (parent, {postId, userId}, context) => {
+      if(context.user){ 
+        try {
+          const removedPost = await User.findByIdAndUpdate(
+            userId,
+            {$pull: {posts: postId } },
+            { new: true }
+          );
+          return removedPost;
+        } catch(error){
+          console.error(error)
+        }
+      }
+    },
+
     createPost: async (parent, args, context) => {
       if (context.user) {
         const post = await Post.create({

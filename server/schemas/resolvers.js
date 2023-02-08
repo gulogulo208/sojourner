@@ -132,6 +132,14 @@ const resolvers = {
       return { token, user };
     },
 
+    updateUser: async (parent, args, context) => {
+      if (context.user) {
+        return await User.findByIdAndUpdate(context.user._id, args, { new: true });
+      }
+
+      throw new AuthenticationError('Not logged in');
+    },
+
     createTrip: async (parent, { tripName, tripDate }, context) => {
       if (context.user) {
         try {

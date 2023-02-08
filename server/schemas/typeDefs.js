@@ -64,7 +64,7 @@ const typeDefs = gql`
     removeTrip(tripId: String!): Trip
     createTrip(tripName: String!, tripDate: String!): Trip
     addUserToTrip(tripId: String!, email: String!): Trip
-
+    updateUser(firstName: String, lastName: String, email: String, password: String): User
     createPost(
       postType: String!
       firstName: String!

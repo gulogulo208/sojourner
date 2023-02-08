@@ -20,6 +20,8 @@ const TripItem = ({ }) => {
   const { userTrips } = state;
   const [trips, setTrips] = useState([]);
 
+  /* updates the global state variables and passes in the tripId we receive
+     when clicking on a trip to the currentTripId global variable */
   const handleTripClick = (tripId) => {
     dispatch({
       type: SHOW_TIMELINE,
@@ -28,6 +30,7 @@ const TripItem = ({ }) => {
     });
   };
 
+  // populates the trips state with the current values within global userTrips variable
   useEffect(() => {
     dispatch({
       type: UPDATE_USER_TRIPS,

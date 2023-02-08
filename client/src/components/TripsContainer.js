@@ -56,6 +56,7 @@ const TripsContainer = () => {
     data: tripsData,
   } = useQuery(GET_TRIPS);
 
+  // reload required to display generated image
   const handleAddTrip = async () => {
     await createTrip({
       variables: {
@@ -70,6 +71,7 @@ const TripsContainer = () => {
   const handleOpenTripModal = () => setOpenTripModal(true);
   const handleCloseTripModal = () => setOpenTripModal(false);
 
+  // renders the component with the new trip the user created
   React.useEffect(() => {
     if (loadingTrips) {
       return;

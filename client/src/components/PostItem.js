@@ -22,12 +22,14 @@ const PostItem = ({ posts }) => {
 
   const [removePost, { loading, error, data }] = useMutation(REMOVE_POST);
 
+  // passes in refreshPosts to tell timeline to re-render and update after post is removed
   const handleRemovePost = async () => {
     try {
       dispatch({
         type: REFRESH_POSTS,
         refreshPosts: false,
       });
+      // makes sure only the person who created the post can delete their post
       await removePost({
         variables: {
           postId: posts._id,

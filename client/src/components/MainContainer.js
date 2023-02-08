@@ -137,7 +137,7 @@ export default function MainContainer() {
   };
 
   // USE EFFECT
-
+  // renders timeline for specific trip when clicked on
   React.useEffect(() => {
     setRenderTimeline(true);
   }, [showTimeline]);

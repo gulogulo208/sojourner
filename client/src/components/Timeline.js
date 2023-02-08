@@ -30,6 +30,7 @@ import ListSubheader from "@mui/material/ListSubheader";
 import Grid from "@mui/material/Grid";
 
 const Timeline = ({ tripId }) => {
+  // Global state
   const [state, dispatch] = useTripContext();
   const { currentTripId, tripPosts, refreshPosts } = state;
   const [getTrip, { loading: loadingTrip, data: tripData }] = useLazyQuery(
@@ -45,7 +46,7 @@ const Timeline = ({ tripId }) => {
     GET_POSTS,
     {
       variables: { tripId: currentTripId },
-
+      // prevents only fetching from cache
       fetchPolicy: "cache-and-network",
 
     }
@@ -59,7 +60,8 @@ const Timeline = ({ tripId }) => {
   const [removeUserFromTrip, { data: updatedTripData }] = useMutation(
     REMOVE_USER_FROM_TRIP
   );
-
+  
+  // local state initializations
   const [trip, setTrip] = useState({});
   const [showPosts, setShowPosts] = useState(false);
   const [showAddUserModal, setShowAddUserModal] = useState(false);
@@ -70,6 +72,8 @@ const Timeline = ({ tripId }) => {
   const handleOpenAddUserModal = () => setShowAddUserModal(true);
   const handleCloseAddUserModal = () => setShowAddUserModal(false);
 
+  // function for add user mutation
+  // passes the global state variable of currentTripId and local variable of friendEmail
   const handleAddUser = async () => {
     await addUserToTrip({
       variables: {
@@ -83,6 +87,8 @@ const Timeline = ({ tripId }) => {
 
   const [removeTrip, { loading, error, data }] = useMutation(REMOVE_TRIP);
 
+  // utilizes the action and reducers associated with removing a trip
+  // along with remove trip mutation
   const handleRemoveTrip = async (tripId) => {
     try {
       dispatch({
@@ -130,6 +136,8 @@ const Timeline = ({ tripId }) => {
     p: 4,
   };
 
+  /* use effect to conditionally render the timeline and dispatch to update the 
+     global state variable of tripPosts */
   useEffect(() => {
     getTrip();
     getPosts();
@@ -157,6 +165,8 @@ const Timeline = ({ tripId }) => {
     tripPosts,
     refreshPosts,
   ]);
+
+  /**** Commented this out to prevent unnecessary load animations ****/
 
 /*   if (loadingPosts || loadingTrip || loadingUsers) {
     return (

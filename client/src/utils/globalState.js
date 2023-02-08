@@ -4,6 +4,7 @@ import { useTripReducer } from "./reducers";
 const TripContext = createContext();
 const { Provider } = TripContext;
 
+// global state initialization
 const TripProvider = ({ value = [], ...props }) => {
   const [state, dispatch] = useTripReducer({
     tripPosts: [],

@@ -46,6 +46,7 @@ const CreatePost = () => {
   const [showItineraryPost, setShowItineraryPost] = React.useState(false);
   const [createPost, { loading, error, data }] = useMutation(CREATE_POST);
 
+  // conditionally effects the type of post you will be making based on the initial postType
   React.useEffect(() => {
     if (post.postType === "Transportation") {
       setShowTransportationPost(true);
@@ -66,6 +67,8 @@ const CreatePost = () => {
     setPost({ ...post, tripId: currentTripId });
   }, [currentTripId]);
 
+  // when handlePost function is executed, refreshPosts global state is changed
+  // resets the local state for inputing post values
   React.useEffect(() => {
     setShowItineraryPost(false);
     setShowLodgingPost(false);
@@ -91,6 +94,8 @@ const CreatePost = () => {
     setPost({ ...post, toDate: dayjs(date.$d).format("MM/DD/YY hh:mm:ss A") });
   };
 
+  /* sets refreshPosts to true. vital for telling the timeline to re-render
+     and display the most updated post without needing to refresh the page */
   const handlePost = async () => {
     try {
       dispatch({

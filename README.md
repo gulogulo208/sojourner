@@ -2,16 +2,11 @@
 
 ## Description
 
-Provide a short description explaining the what, why, and how of your project. Use the following questions as a guide:
+- We built this app as a travel planning utility and fun social hangout.
 
+- This app will save users time and data by having one catch-all app where they can see upcoming trips and share travel information and invite friends.
 
-- We built this app as a travel planning utility and fun social hangout
-
-- This app will save users time and data by having one catch-all app where they can see upcoming trips and share travel information and invite friends
-- What problem does it solve?
-- 
-
-- Our team learned a ton about React components and React routing!  We also learned about using GraphQL which enables some unique queries and quick loading simply designed apps
+- Our team learned a ton about React components and React routing!  We also learned about using GraphQL which enables some unique queries and quick loading simply designed apps.  Gained exposure to openAI API. 
 
 ## Table of Contents 
 
@@ -24,17 +19,15 @@ If your README is long, add a table of contents to make it easy for users to fin
 
 ## Installation
 
-What are the steps required to install your project? Provide a step-by-step description of how to get the development environment running.
+https://sojourner-app.herokuapp.com/
 
 ## Usage
 
-Provide instructions and examples for use. Include screenshots as needed.
+Sample:
 
-To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
 
-    ```md
-    ![App Login](assets/images/screenshot.png)
-    ```
+![App Login](./assets/images/Sojourner.png)
+
 
 ## Credits
 

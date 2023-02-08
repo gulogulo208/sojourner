@@ -40,7 +40,7 @@ const TripItem = ({ }) => {
     <List sx={{ 
       display: "flex",
       flexDirection: "row"
-    }}>
+    }} id="tripUL">
       {trips.map((trip, index) => (
         <Tooltip key={trip._id} title={trip.tripName} placement="right">
           <ListItem
@@ -57,7 +57,7 @@ const TripItem = ({ }) => {
                 px: 2.5,
               }}
             >
-              <Card sx={{ width: "100%", display: "block" }}>
+              <Card sx={{ width: "100%", display: "block"}}>
                 <CardActionArea>
                   <CardMedia
                     component="img"
@@ -69,7 +69,7 @@ const TripItem = ({ }) => {
                     alt="destination img"
                   />
                   <CardContent className="tripCard">
-                    <Typography gutterBottom variant="h5" component="div">
+                    <Typography sx={{width:"200px" }} gutterBottom variant="h5" component="div">
                       {trip.tripName}
                     </Typography>
                   </CardContent>

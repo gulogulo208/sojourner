@@ -55,6 +55,22 @@ main {
   min-height: 100vh;
 }
 
+#tripList{
+  max-width: 80vw;
+  overflow: auto;
+  background-color: var(--onyx);
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+#tripList::-webkit-scrollbar{
+  display: none;
+}
+
+#tripUL{
+  max-width: 100%;
+}
+
 #postContainer {
   margin-left: 0px;
   margin-right: 0px;

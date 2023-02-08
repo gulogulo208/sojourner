@@ -1,26 +1,23 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { CardActionArea, CircularProgress } from "@mui/material";
-import { GET_POSTS, GET_TRIPS } from "../utils/queries";
-import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Modal from "@mui/material/Modal";
 import Backdrop from "@mui/material/Backdrop";
 import Fade from "@mui/material/Fade";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import { CREATE_TRIP } from "../utils/mutation";
-import Container from "@mui/material/Container";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-// import StickyFooter from "./Footer";
+import { Box, Container } from "@mui/system";
+import { Typography } from "@mui/material";
 import { useTripContext } from "../utils/globalState";
+import {CircularProgress, Button} from "@mui/material";
+import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
+import { CREATE_TRIP } from "../utils/mutation";
+import { GET_TRIPS } from "../utils/queries";
 import { UPDATE_USER_TRIPS, ADD_USER_TRIP } from "../utils/actions";
 import TripItem from "./TripItem";
 
-const TripsContainer = () => {
+export default function AddTripBtn() {
   const [state, dispatch] = useTripContext();
   const { userTrips } = state;
   const [showTrips, setShowTrips] = React.useState(null);
@@ -28,13 +25,16 @@ const TripsContainer = () => {
   const [tripName, setTripName] = React.useState("");
   const [tripDate, setTripDate] = React.useState("");
 
+  const handleCloseTripModal = () => setOpenTripModal(false);
+  const handleOpenTripModal = () => setOpenTripModal(true);
+
   const tripModalStyle = {
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 400,
-    bgcolor: "background.paper",
+    backgroundColor: "white",
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
@@ -66,9 +66,6 @@ const TripsContainer = () => {
     handleCloseTripModal();
     window.location.reload();
   };
-
-  const handleOpenTripModal = () => setOpenTripModal(true);
-  const handleCloseTripModal = () => setOpenTripModal(false);
 
   React.useEffect(() => {
     if (loadingTrips) {
@@ -104,7 +101,7 @@ const TripsContainer = () => {
   }, [dispatch, loadingCreateTrip, createTripError, createTripData]);
 
   return (
-    <Container sx={{ display: "flex", justifyContent: "center"}} id="tripList">
+    <Container sx={{ display: "flex", justifyContent: "center"}}>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -163,42 +160,47 @@ const TripsContainer = () => {
             </Box>
           </Box>
         </Fade>
-      </Modal>
-      {showTrips}
-      {/* <Container>
-        {userTrips.length <= 0 ? <Box id="textId" sx={{
-          display: "block",
-          alignItems: "center",
-        }}>
-            <Button
+      </Modal>    
+      {userTrips.length <= 0 ? (
+        <Box
+          id="textId"
+          sx={{
+            display: "block",
+            alignItems: "center",
+          }}
+        >
+          <Button
             onClick={handleOpenTripModal}
             variant="contained"
             sx={{
-            textAlign: "center",
+              textAlign: "center",
               height: "50px",
               mb: "15px",
             }}
           >
             Add a Trip
-          </Button> </Box>: <Box sx={{
-          display: "flex",
-          alignItems: "flex-end",
-        }}>
-            <Button
+          </Button>{" "}
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "flex-end",
+          }}
+        >
+          <Button
             onClick={handleOpenTripModal}
             variant="contained"
             sx={{
-            textAlign: "center",
+              textAlign: "center",
               height: "50px",
               mb: "15px",
             }}
           >
             Add a Trip
-          </Button> </Box> 
-        }
-      </Container> */}
+          </Button>{" "}
+        </Box>
+      )}
     </Container>
   );
-};
-
-export default TripsContainer;
+}

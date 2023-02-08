@@ -62,10 +62,10 @@ function Signup() {
   const theme = createTheme();
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+    <ThemeProvider theme={theme} className="signupContainer">
+      <Container component="main" maxWidth="xs" className="signupContainer">
         <CssBaseline />
-        <Box
+        <Box className="signupContainer"
           sx={{
             marginTop: 8,
             display: "flex",
@@ -76,16 +76,16 @@ function Signup() {
           {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}> */}
           <FlightTakeoffIcon fontSize="large" />
           {/* </Avatar> */}
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" className="signupContainer">
             Sign up
           </Typography>
-          <Box
+          <Box className="signupContainer"
             component="form"
             noValidate
             onSubmit={handleFormSubmit}
             sx={{ mt: 3 }}
           >
-            <Grid container spacing={2}>
+            <Grid className="signupContainer" container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"

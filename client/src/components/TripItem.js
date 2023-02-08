@@ -68,7 +68,7 @@ const TripItem = ({ }) => {
                     src={trip.tripPhoto}
                     alt="destination img"
                   />
-                  <CardContent>
+                  <CardContent className="tripCard">
                     <Typography gutterBottom variant="h5" component="div">
                       {trip.tripName}
                     </Typography>

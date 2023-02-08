@@ -234,11 +234,11 @@ export default function MainContainer() {
           id="postContainer"
         >
           <Box >
-            <Typography variant="h2" color='white' sx={{
-              textAlign: 'center'
+            {userTrips.length <= 0 ?<Typography variant="h2" color='white' sx={{
+              textAlign: 'center', color: "black"
             }}>
-              Your Trips 
-            </Typography>
+              Plan A Trip 
+            </Typography> : ""}
           </Box>
           <TripsContainer />
           {showTimeline && <Timeline />}

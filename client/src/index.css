@@ -4,11 +4,20 @@
   --alice-blue: #e9f1f7ff;
   --rich-black-fogra-29: #131b23ff;
   --french-bistre: #816c61ff;
+  --sage: #bcbd8bff;
+  --moonstone: #009fb7ff;
+  --indigo-dye: #224870ff;
+  --eerie-black: #1e2019ff;
+  --onyx: #393e41ff;
 }
 
 #root {
   min-height: 100vh;
-  background-color: var(--rich-black-fogra-29);
+  background-color: white;
+}
+
+.signupContainer{
+  background-color: white;
 }
 
 #toolBar {
@@ -59,16 +68,20 @@ main {
 }
 
 #postList{
-  background-color: var(--star-command-blue);
+  background-color: var(--alice-blue);
 }
 
 #postList::-webkit-scrollbar{
   display: none;
 }
 
+.tripCard{
+ background-color: var(--alice-blue); 
+}
+
 #postPaper {
   padding: 2rem;
-  background-color: var(--star-command-blue);
+  background-color: var(--alice-blue);
 }
 
 #footer {

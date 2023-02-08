@@ -158,13 +158,13 @@ const Timeline = ({ tripId }) => {
     refreshPosts,
   ]);
 
-  if (loadingPosts || loadingTrip || loadingUsers) {
+/*   if (loadingPosts || loadingTrip || loadingUsers) {
     return (
       <>
         <CircularProgress />
       </>
     );
-  }
+  } */
   return (
     <>
       <Paper elevation={3} id="postPaper">

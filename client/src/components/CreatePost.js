@@ -24,7 +24,7 @@ import { REFRESH_POSTS, UPDATE_TRIP_POSTS } from "../utils/actions";
 
 const CreatePost = () => {
   const [state, dispatch] = useTripContext();
-  const { currentTripId, tripPosts } = state;
+  const { currentTripId, tripPosts, refreshPosts } = state;
 
   const [post, setPost] = React.useState({
     postType: "",
@@ -65,6 +65,20 @@ const CreatePost = () => {
   React.useEffect(() => {
     setPost({ ...post, tripId: currentTripId });
   }, [currentTripId]);
+
+  React.useEffect(() => {
+    setShowItineraryPost(false);
+    setShowLodgingPost(false);
+    setShowTransportationPost(false);
+    post.postType = '';
+    post.fromDate = "";
+    post.toDate = "";
+    post.price = 0;
+    post.transportationType = "";
+    post.lodgingType = "";
+    post.activity = "";
+    post.description = "";
+  }, [refreshPosts])
 
   const handleFromDate = (date) => {
     setPost({

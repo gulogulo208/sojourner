@@ -237,7 +237,7 @@ export default function MainContainer() {
             {userTrips.length <= 0 ?<Typography variant="h2" color='white' sx={{
               textAlign: 'center', color: "black"
             }}>
-              Plan A Trip !
+              Plan A Trip
             </Typography> : ""}
           </Box>
           <TripsContainer />

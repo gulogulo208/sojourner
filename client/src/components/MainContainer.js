@@ -26,6 +26,15 @@ import MUILink from "@mui/material/Link";
 import { useTripContext } from "../utils/globalState";
 import Auth from "../utils/auth";
 import TripsContainer from "./TripsContainer";
+import AddTripBtn from "./addTripBtn";
+// import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+// import Modal from "@mui/material/Modal";
+// import Backdrop from "@mui/material/Backdrop";
+// import Fade from "@mui/material/Fade";
+// import TextField from "@mui/material/TextField";
+// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+// import dayjs from "dayjs";
 
 // MUI HELPERS
 const drawerWidth = 240;
@@ -121,8 +130,6 @@ export default function MainContainer() {
   const { userTrips, showTimeline } = state;
   const [open, setOpen] = React.useState(false);
   const [renderTimeline, setRenderTimeline] = React.useState(false);
-
-  // HELPER FUNCTIONS
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -238,9 +245,14 @@ export default function MainContainer() {
               textAlign: 'center', color: "black"
             }}>
               Plan A Trip
-            </Typography> : ""}
+            </Typography> : <Typography variant="h2" color='white' sx={{ display: "none",
+              textAlign: 'center', color: "black"
+            }}>
+              Plan A Trip
+            </Typography>}
           </Box>
           <TripsContainer />
+        <AddTripBtn/>
           {showTimeline && <Timeline />}
         </Container>
         <Box

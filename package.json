@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/gulogulo208/sojourner/issues"
   },
-  "homepage": "https://github.com/gulogulo208/sojourner#readme"
+  "homepage": "https://github.com/gulogulo208/sojourner#readme",
+  "dependencies": {
+    "firebase": "^9.23.0"
+  }
 }

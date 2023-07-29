@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/gulogulo208/sojourner#readme",
   "dependencies": {
-    "firebase": "^9.23.0"
+    "firebase": "^9.23.0",
+    "mongodb": "^5.7.0"
   }
 }
